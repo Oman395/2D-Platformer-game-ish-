@@ -15,8 +15,8 @@ export function start() {
         var bottom = false;
         var left = false;
         var right = false;
-        if (player.y > window.innerHeight) {
-            player.y = window.innerHeight / 2;
+        if (player.y > 1000) {
+            player.y = 0;
         }
         if (vely == 0) {
             player.texture = sprites[0];
@@ -67,8 +67,8 @@ export function start() {
 }
 export function up() {
     if (vely == 0) {
-        vely = 9;
-        player.y -= 9;
+        vely = 7;
+        player.y -= 7;
         player.texture = sprites[1];
     }
 }

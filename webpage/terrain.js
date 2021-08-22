@@ -5,10 +5,13 @@ export var terrainCont = new PIXI.Container();
 var canMoveL = true;
 var canMoveR = true;
 var map = [
-    '--------BBBB-----------------------------------------------------------',
     '-----------------------------------------------------------------------',
-    '--BWWB-----------------------------------------------------------------',
-    'BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB'
+    '-----------------------------------------------------------------------',
+    '----------------------------------WWW----------------------------------',
+    '---------------------------------B-------------------------------------',
+    '-------WWW----BBB----WWW----BWWWB--------BBB----WWW----BBB----WWW----BBB',
+    'BBB--------------------------------------------------------------------'
+
 ]
 var blocks = {};
 export function start() {
@@ -18,10 +21,10 @@ export function start() {
         for (let e = 0; e < currentPath.length; e++) {
             switch (map[i][e]) {
                 case 'B':
-                    addBlock(`terrain${i}`, e * 150, 100 + 150 * i, './webpage/terrain.png');
+                    addBlock(`terrain${i}`, e * 150, 150 * i, './webpage/terrain.png');
                     break;
                 case 'W':
-                    addBlock(`terrain${i}`, e * 150, 100 + 150 * i, './webpage/player.png');
+                    addBlock(`terrain${i}`, e * 150, 150 * i, './webpage/player.png');
                     break;
             }
         }
@@ -43,10 +46,6 @@ export function start() {
                     console.log("elif");
                     var deltaX = terrainBounds.x + terrainBounds.width - playerBounds.x;
                     terrainCont.x -= deltaX;
-                }
-                if (playerBounds.x < terrainBounds.x + terrainBounds.width && terrainBounds.y < playerBounds.y) {
-                    //let deltaX = playerBounds.x + playerBounds.width - terrainBounds.x;
-                    //terrainCont.x += deltaX;
                 }
                 switch (index.collision(playerBounds, terrainBounds)[1]) {
                     case true: // left
