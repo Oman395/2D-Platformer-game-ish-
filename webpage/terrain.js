@@ -8,11 +8,12 @@ var map = [
     'LR------------------------------------------------------------------LR',
     'LR------------------------------------------------------------------LR',
     'LR------------------------------------------------------------------LR',
-    'LR---------------------------(TT)-----(TT)-----(TT)-----------------LR',
-    'LR------------------(TT)-----{BB}-----{BB}-----{BB}-----(TT)--------LR',
-    'LR---------(TT)-----{BB}--------------------------------{BB}--------LR',
-    'L]TTT)-----{BB}-------------------------------------------------(TTT[R',
-    'LGGGGR----------------------------------------------------------LGGGGR',    // mostly not visible, but used as base
+    'LR------------------------------------------------------------------LR',
+    'LR------------------------------------------------------------------LR',
+    'LR------------------------------------------------------------------LR',
+    'LR------------------------------------------------------------------LR',
+    'L]TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT[R',
+    'LGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGR'    // mostly not visible, but used as base
 ]
 var notInContact = true;
 var prevContact;
@@ -116,7 +117,7 @@ export function lefty(delta) {
             }
         }
         var adjustedParams = playerBounds;
-        adjustedParams.x -= 0.01;
+        adjustedParams.x -= 0.001;
         if (index.collision(terrainBounds, adjustedParams)[0]) {
             left = true;
         }
@@ -148,7 +149,7 @@ export function righty(delta) {
             }
         }
         var adjustedParams = playerBounds;
-        adjustedParams.x += 0.01;
+        adjustedParams.x += 0.001;
         if (index.collision(terrainBounds, adjustedParams)[0]) {
             right = true;
         }

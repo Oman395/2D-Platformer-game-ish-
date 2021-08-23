@@ -1,11 +1,14 @@
 import * as index from "./index.js";
 import * as terrain from "./terrain.js";
-export var sprites = [PIXI.Texture.from('./webpage/images/player-melvin.png'), PIXI.Texture.from('./webpage/images/player-melvin-down.png'), PIXI.Texture.from('./webpage/images/player-melvin-right-f1.png'), PIXI.Texture.from('./webpage/images/player-melvin-left-f1.png'), PIXI.Texture.from('./webpage/images/player-melvin-downr.png'), PIXI.Texture.from('./webpage/images/player-melvin-downl.png'), PIXI.Texture.from('./webpage/images/player-melvin-jump.png'), PIXI.Texture.from('./webpage/images/player-melvin-downr.png'), PIXI.Texture.from('./webpage/images/player-melvin-downl.png')];
+export var sprites = [PIXI.Texture.from('./webpage/images/player-melvin.png'), PIXI.Texture.from('./webpage/images/player-melvin-down.png'), PIXI.Texture.from('./webpage/images/player-melvin-right-f1.png'), PIXI.Texture.from('./webpage/images/player-melvin-left-f1.png'), PIXI.Texture.from('./webpage/images/player-melvin-downr.png'), PIXI.Texture.from('./webpage/images/player-melvin-downl.png'), PIXI.Texture.from('./webpage/images/player-melvin-jump.png'), PIXI.Texture.from('./webpage/images/player-melvin-downr.png'), PIXI.Texture.from('./webpage/images/player-melvin-downl.png'), PIXI.Texture.from('./webpage/images/player-melvin-right-f2.png'), PIXI.Texture.from('./webpage/images/player-melvin-left-f2.png')];
 export var player = PIXI.Sprite.from(sprites[0]);
 export var vely = 0;
 export var Collided = false;
 export var prevCollided = false;
 export var canMove = false;
+var count = 0;
+export var currentLeft = sprites[2];
+export var currentRight = sprites[3];
 export function start() {
     player.anchor.set(0.5);
     player.y = 80;
@@ -14,6 +17,17 @@ export function start() {
     player.height = 100;
     index.app.stage.addChild(player);
     index.app.ticker.add((delta) => {
+        if (count > 10) {
+            count = 0;
+            if (currentLeft == sprites[2]) {
+                currentLeft = sprites[7];
+                currentRight = sprites[8];
+            } else {
+                currentLeft = sprites[2];
+                currentRight = sprites[3];
+            }
+        }
+        count++;
         var top = false;
         var bottom = false;
         var left = false;
@@ -67,9 +81,9 @@ export function start() {
         if (left) {
         }
         player.y -= vely * delta * 3;
-        if(Collided != prevCollided) {
+        if (Collided != prevCollided) {
             canMove = true;
-        } else if(Collided = true) {
+        } else if (Collided = true) {
             canMove = false;
         }
     });

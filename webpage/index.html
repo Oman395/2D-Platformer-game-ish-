@@ -22,7 +22,7 @@
             position: fixed;
             touch-action: none;
             width: calc(100% - 2px);
-            height: calc(100% - 80px);
+            height: calc(100% - 2px);
             border: 2px solid black;
             top: 0;
         }
@@ -31,8 +31,10 @@
             margin: 0;
         }
 
-        .gamingData {
-            vertical-align: bottom;
+
+        .MoveDown {
+            position: relative;
+            top: 65vw;
         }
     </style>
 </head>
@@ -40,6 +42,8 @@
 <body>
     <div class="canvas-container">
         <canvas id="PIXI">Sorry, your browser lacks canvas support!</canvas>
+    </div>
+    <div class="MoveDown">
     </div>
 </body>
 

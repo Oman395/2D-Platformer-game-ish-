@@ -4,6 +4,7 @@ var ArrowUp = false;
 var ArrowLeft = false;
 var ArrowRight = false;
 export var app = new PIXI.Application({ resizeTo: document.getElementById("PIXI"), backgroundColor: 0xafafaf, antialiasing: true, view: document.getElementById("PIXI") });
+console.log(app);
 document.body.appendChild(app.view);
 app.stage.interactive = true;
 (player.start(), terrain.start(), () => {
@@ -14,6 +15,8 @@ var curY = Math.round(player.player.y);
 var pastY;
 var stopped = false;
 var prevStopped;
+var count;
+var score = 0;
 export var ticker = PIXI.Ticker.shared;
 export function collision(ab, bb) {
     return [ab.x + ab.width > bb.x && ab.x < bb.x + bb.width && ab.y + ab.height > bb.y && ab.y < bb.y + bb.height,
@@ -21,7 +24,16 @@ export function collision(ab, bb) {
     ab.y + ab.height > bb.y + bb.height && ab.x + ab.width > bb.x && ab.x < bb.x + bb.width && ab.y + ab.height > bb.y && ab.y < bb.y + bb.height];
 }
 app.ticker.maxFPS = 0;
+var text;
 app.ticker.add((delta) => {
+    if (terrain.terrainCont.x < score * -1 * 100) {
+        score = terrain.terrainCont.x * -1 * 0.01;
+    }
+    app.stage.removeChild(text);
+    var textOptions = new PIXI.TextStyle({ fontSize: 30 });
+    text = new PIXI.Text(`${Math.round(score)}`, textOptions);
+    app.stage.addChild(text);
+    count++;
     pastX = Math.round(curX);
     curX = Math.round(terrain.terrainCont.x);
     pastY = Math.round(curY);
@@ -41,12 +53,12 @@ app.ticker.add((delta) => {
                 switch (curX - pastX < 0) {
                     case true: // right
                         if (player.canMove) {
-                            player.player.texture = player.sprites[2];
+                            player.player.texture = player.currentLeft;
                         }
                         break;
                     case false: // left
                         if (player.canMove) {
-                            player.player.texture = player.sprites[3]
+                            player.player.texture = player.currentRight;
                         }
                         break;
                 }
@@ -100,6 +112,7 @@ app.ticker.add((delta) => {
     if (ArrowRight) {
         terrain.righty(delta);
     }
+
 });
 document.addEventListener('keydown', function (event) {
     switch (event.code) {
