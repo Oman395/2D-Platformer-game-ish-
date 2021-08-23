@@ -25,6 +25,9 @@ app.ticker.speed = 1;
 var currentSpriteL;
 var currentSpriteR;
 app.ticker.add((delta) => {
+    if(app.ticker.FPS < 110) {
+        app.ticker.speed = 0.5;
+    }
     count++;
     if (count > 10) {
         count = 0;
