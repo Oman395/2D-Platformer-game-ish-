@@ -8,27 +8,31 @@
     <script src="./webpage/terrain.js" type="module"></script>
     <style>
         canvas {
-            display: inline;
-            vertical-align: bottom;
+            vertical-align: top;
         }
 
         .canvas-container {
             width: 100%;
             text-align: center;
         }
+
         #PIXI {
-            width: 97vw;
-            height: 97vh;
-            border-left: 0.5vw solid black;
-            border-right: 0.5vw solid black;
-            border-top: 0.5vh solid black;
-            border-bottom: 0.5vh solid black;
+            margin: 0;
+            padding: 0;
+            position: fixed;
+            touch-action: none;
+            width: calc(100% - 2px);
+            height: calc(100% - 80px);
+            border: 2px solid black;
+            top: 0;
         }
+
         body {
-            margin-left: 1vw;
-            margin-right: 1vw;
-            margin-top: 1vh;
-            margin-bottom: 1vh;
+            margin: 0;
+        }
+
+        .gamingData {
+            vertical-align: bottom;
         }
     </style>
 </head>

@@ -1,14 +1,17 @@
 import * as index from "./index.js";
 import * as terrain from "./terrain.js";
-export var sprites = [PIXI.Texture.from('./webpage/images/player.png'), PIXI.Texture.from('./webpage/images/player-jump.png'), PIXI.Texture.from('./webpage/images/player-right.png'), PIXI.Texture.from('./webpage/images/player-left.png'), PIXI.Texture.from('./webpage/images/player-topright.png'), PIXI.Texture.from('./webpage/images/player-topleft.png'), PIXI.Texture.from('./webpage/images/player-up.png'), PIXI.Texture.from('./webpage/images/player-upright.png'), PIXI.Texture.from('./webpage/images/player-upleft.png')];
+export var sprites = [PIXI.Texture.from('./webpage/images/player-melvin.png'), PIXI.Texture.from('./webpage/images/player-melvin-down.png'), PIXI.Texture.from('./webpage/images/player-melvin-right-f1.png'), PIXI.Texture.from('./webpage/images/player-melvin-left-f1.png'), PIXI.Texture.from('./webpage/images/player-melvin-downr.png'), PIXI.Texture.from('./webpage/images/player-melvin-downl.png'), PIXI.Texture.from('./webpage/images/player-melvin-jump.png'), PIXI.Texture.from('./webpage/images/player-melvin-downr.png'), PIXI.Texture.from('./webpage/images/player-melvin-downl.png')];
 export var player = PIXI.Sprite.from(sprites[0]);
 export var vely = 0;
+export var Collided = false;
+export var prevCollided = false;
+export var canMove = false;
 export function start() {
     player.anchor.set(0.5);
     player.y = 80;
     player.x = 200;
-    player.width = 150;
-    player.height = 150;
+    player.width = 100;
+    player.height = 100;
     index.app.stage.addChild(player);
     index.app.ticker.add((delta) => {
         var top = false;
@@ -21,9 +24,12 @@ export function start() {
         vely -= 0.4 * delta;
         var deltaY;
         let playerBounds = player.getBounds();
+        prevCollided = Collided;
+        Collided = true;
         for (let i = 0; i < terrain.terrainCont.children.length; i++) {
             let terrainBounds = terrain.terrainCont.children[i].getBounds();
             if (index.collision(terrainBounds, playerBounds)[0]) {
+                Collided = false;
                 switch (index.collision(playerBounds, terrainBounds)[1]) {
                     case true: // right
                         var right = true;
@@ -44,6 +50,7 @@ export function start() {
                         }
                         break;
                 }
+            } else {
             }
         }
         if (top) {
@@ -60,8 +67,10 @@ export function start() {
         if (left) {
         }
         player.y -= vely * delta * 3;
-        if (vely != 0 && vely != -0.1) {
-        } else {
+        if(Collided != prevCollided) {
+            canMove = true;
+        } else if(Collided = true) {
+            canMove = false;
         }
     });
 }

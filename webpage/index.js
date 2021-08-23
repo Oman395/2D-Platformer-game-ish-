@@ -27,20 +27,12 @@ app.ticker.add((delta) => {
     pastY = Math.round(curY);
     curY = Math.round(player.player.y);
     prevStopped = stopped;
-    if (curY == pastY && curX != pastX) {
-        switch (curX - pastX < 0) {
-            case true: // right
-                player.player.texture = player.sprites[2];
-                break;
-            case false: // left
-                player.player.texture = player.sprites[3]
-                break;
-        }
-    }
     if (curY == pastY && curX == pastX) {
         stopped = true;
         if (stopped == prevStopped) {
-            player.player.texture = player.sprites[0];
+            if (player.canMove) {
+                player.player.texture = player.sprites[0];
+            }
         }
     } else {
         stopped = false;
@@ -48,10 +40,14 @@ app.ticker.add((delta) => {
             case true:
                 switch (curX - pastX < 0) {
                     case true: // right
-                        player.player.texture = player.sprites[2];
+                        if (player.canMove) {
+                            player.player.texture = player.sprites[2];
+                        }
                         break;
                     case false: // left
-                        player.player.texture = player.sprites[3]
+                        if (player.canMove) {
+                            player.player.texture = player.sprites[3]
+                        }
                         break;
                 }
                 break;
@@ -82,10 +78,10 @@ app.ticker.add((delta) => {
                             case false: // down
                                 switch (curX - pastX < 0) {
                                     case true: // down right
-                                        player.player.texture = player.sprites[4];
+                                        player.player.texture = player.sprites[7];
                                         break;
                                     case false: // down left
-                                        player.player.texture = player.sprites[5]
+                                        player.player.texture = player.sprites[8]
                                         break;
                                 }
                                 break;

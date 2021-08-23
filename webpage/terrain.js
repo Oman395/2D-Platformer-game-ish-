@@ -2,14 +2,17 @@ import * as index from './index.js'
 import * as player from './player.js'
 export var terrainCont = new PIXI.Container();
 var map = [
-    '(;BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB()',
-    'LR-------------------------------------------------------------------LR',
-    'LR-------------------------------------------------------------------LR',
-    'LR-------------------------------------------------------------------LR',
-    'LR---------------------------(TT)-----(TT)-----(TT)------------------LR',
-    'LR------------------(TT)-----{BB}-----{BB}-----{BB}-----(TT)---------LR',
-    'L]TTT)-----(TT)-----{BB}--------------------------------{BB}----(TTTT[R',
-    '{BBBB}-----{BB}-------------------------------------------------{BBBBB}' // mostly not visible, but used as base
+    '(;BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB()',
+    'LR------------------------------------------------------------------LR',
+    'LR------------------------------------------------------------------LR',
+    'LR------------------------------------------------------------------LR',
+    'LR------------------------------------------------------------------LR',
+    'LR------------------------------------------------------------------LR',
+    'LR---------------------------(TT)-----(TT)-----(TT)-----------------LR',
+    'LR------------------(TT)-----{BB}-----{BB}-----{BB}-----(TT)--------LR',
+    'LR---------(TT)-----{BB}--------------------------------{BB}--------LR',
+    'L]TTT)-----{BB}-------------------------------------------------(TTT[R',
+    'LGGGGR----------------------------------------------------------LGGGGR',    // mostly not visible, but used as base
 ]
 var notInContact = true;
 var prevContact;
@@ -26,43 +29,43 @@ export function start() {
         for (let e = 0; e < currentPath.length; e++) {
             switch (map[i][e]) {
                 case 'G':
-                    addBlock(`terrain${i}`, e * 150 - 150, 150 * i - 130, './webpage/images/terrain-nograss.png');
+                    addBlock(`terrain${i}`, e * 100 - 100, 100 * i - 80, './webpage/images/terrain-nograss.png');
                     break;
                 case 'T':
-                    addBlock(`terrain${i}`, e * 150 - 150, 150 * i - 130, './webpage/images/terrain.png');
+                    addBlock(`terrain${i}`, e * 100 - 100, 100 * i - 80, './webpage/images/terrain.png');
                     break;
                 case 'L':
-                    addBlock(`terrain${i}`, e * 150 - 150, 150 * i - 130, './webpage/images/terrain.png', 270);
+                    addBlock(`terrain${i}`, e * 100 - 100, 100 * i - 80, './webpage/images/terrain.png', 270);
                     break;
                 case 'R':
-                    addBlock(`terrain${i}`, e * 150 - 150, 150 * i - 130, './webpage/images/terrain.png', 90);
+                    addBlock(`terrain${i}`, e * 100 - 100, 100 * i - 80, './webpage/images/terrain.png', 90);
                     break;
                 case 'B':
-                    addBlock(`terrain${i}`, e * 150 - 150, 150 * i - 130, './webpage/images/terrain.png', 180);
+                    addBlock(`terrain${i}`, e * 100 - 100, 100 * i - 80, './webpage/images/terrain.png', 180);
                     break;
                 case '(':
-                    addBlock(`terrain${i}`, e * 150 - 150, 150 * i - 130, './webpage/images/terrain-corner.png');
+                    addBlock(`terrain${i}`, e * 100 - 100, 100 * i - 80, './webpage/images/terrain-corner.png');
                     break;
                 case ')':
-                    addBlock(`terrain${i}`, e * 150 - 150, 150 * i - 130, './webpage/images/terrain-corner.png', 90);
+                    addBlock(`terrain${i}`, e * 100 - 100, 100 * i - 80, './webpage/images/terrain-corner.png', 90);
                     break;
                 case '{':
-                    addBlock(`terrain${i}`, e * 150 - 150, 150 * i - 130, './webpage/images/terrain-corner.png', 270);
+                    addBlock(`terrain${i}`, e * 100 - 100, 100 * i - 80, './webpage/images/terrain-corner.png', 270);
                     break;
                 case '}':
-                    addBlock(`terrain${i}`, e * 150 - 150, 150 * i - 130, './webpage/images/terrain-corner.png', 180);
+                    addBlock(`terrain${i}`, e * 100 - 100, 100 * i - 80, './webpage/images/terrain-corner.png', 180);
                     break;
                 case ']':
-                    addBlock(`terrain${i}`, e * 150 - 150, 150 * i - 130, './webpage/images/terrain-insidecorner.png', 90);
+                    addBlock(`terrain${i}`, e * 100 - 100, 100 * i - 80, './webpage/images/terrain-insidecorner.png', 90);
                     break;
                 case '[':
-                    addBlock(`terrain${i}`, e * 150 - 150, 150 * i - 130, './webpage/images/terrain-insidecorner.png');
+                    addBlock(`terrain${i}`, e * 100 - 100, 100 * i - 80, './webpage/images/terrain-insidecorner.png');
                     break;
                 case ':':
-                    addBlock(`terrain${i}`, e * 150 - 150, 150 * i - 130, './webpage/images/terrain-insidecorner.png', 270);
+                    addBlock(`terrain${i}`, e * 100 - 100, 100 * i - 80, './webpage/images/terrain-insidecorner.png', 270);
                     break;
                 case ';':
-                    addBlock(`terrain${i}`, e * 150 - 150, 150 * i - 130, './webpage/images/terrain-insidecorner.png', 180);
+                    addBlock(`terrain${i}`, e * 100 - 100, 100 * i - 80, './webpage/images/terrain-insidecorner.png', 180);
                     break;
             }
         }
@@ -113,16 +116,16 @@ export function lefty(delta) {
             }
         }
         var adjustedParams = playerBounds;
-        adjustedParams.x -= 0.1;
+        adjustedParams.x -= 0.01;
         if (index.collision(terrainBounds, adjustedParams)[0]) {
             left = true;
         }
     }
     if (!left) {
         if (notInContactL == prevContactL) {
-            terrainCont.x += 13;
+            terrainCont.x += 10;
         } else {
-            terrainCont.x += 26;
+            terrainCont.x += 20;
         }
     }
 }
@@ -145,16 +148,16 @@ export function righty(delta) {
             }
         }
         var adjustedParams = playerBounds;
-        adjustedParams.x += 0.1;
+        adjustedParams.x += 0.01;
         if (index.collision(terrainBounds, adjustedParams)[0]) {
             right = true;
         }
     }
     if (!right) {
         if (notInContact == prevContact) {
-            terrainCont.x -= 13;
+            terrainCont.x -= 10;
         } else {
-            terrainCont.x -= 26;
+            terrainCont.x -= 20;
         }
     }
 }
@@ -162,23 +165,22 @@ function addBlock(name, x, y, image, angle) {
     blocks[name] = new PIXI.Sprite.from(image);
     blocks[name].y = y;
     blocks[name].x = x;
-    blocks[name].width = 150;
-    blocks[name].height = 150;
+    blocks[name].width = 100;
+    blocks[name].height = 100;
     if (angle) {
         switch (angle) {
             case 90:
                 blocks[name].angle = 90;
-                blocks[name].x += 150;
+                blocks[name].x += 100;
                 break;
             case 180:
                 blocks[name].angle = 180;
-                blocks[name].x += 150;
-                blocks[name].y += 150;
+                blocks[name].x += 100;
+                blocks[name].y += 100;
                 break;
             case 270:
                 blocks[name].angle = 270;
-                blocks[name].y += 150;
-                console.log(blocks[name].x, blocks[name].y, x, y)
+                blocks[name].y += 100;
                 break;
         }
     }

@@ -8,9 +8,9 @@
   "scripts": {
     "start": "node server.js"
   },
-  "name": "fuckin-with-pixi",
+  "name": "melvin",
   "version": "0.1.0",
-  "description": "see title",
+  "description": "Messing with PIXI.js, enjpying it so much :D",
   "main": "server.js",
   "author": "Oran RH",
   "license": "MIT"
