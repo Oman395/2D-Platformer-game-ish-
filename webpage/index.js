@@ -83,7 +83,6 @@ app.ticker.add((delta) => {
             stopped = true;
         }
     }
-    console.log(player.canMove);
     if (ArrowUp) {
         player.up(delta);
     }
