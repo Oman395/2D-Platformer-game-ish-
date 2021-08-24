@@ -4,7 +4,8 @@ var params = {
     wait: 1000,
     mount: ['./webpage'],
     root: './',
-    logLevel: 2,
-    middleware: [function(req, res, next) { next(); }]
+    logLevel: 0,
+    middleware: [function(req, res, next) { next(); }],
+    root: './'
 };
 liveServer.start(params);

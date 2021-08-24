@@ -78,7 +78,8 @@ export function start() {
             }
         }
     }
-    index.app.ticker.add(() => {
+    index.app.ticker.add((delta) => {
+        console.log(120 / index.app.ticker.FPS);
         var left = false;
         var right = false;
         let playerBounds = player.player.getBounds();

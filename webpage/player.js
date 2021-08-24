@@ -6,8 +6,6 @@ export var vely = 0;
 export var Collided = false;
 export var currentLeft = sprites[2];
 export var currentRight = sprites[3];
-var velyChange1 = 8;
-var velyChange2 = 4;
 var curX = Math.round(terrain.terrainCont.x);
 var pastX = Math.round(curX);
 var fullCol = false;
@@ -104,13 +102,11 @@ export function start() {
         //}
     });
 }
+export function tick() {
+}
 export function up(delta) {
     if (vely == 0) {
-        if (index.app.ticker.FPS / 120 > 0.9) {
-            vely = velyChange1;
-        } else {
-            vely = velyChange2;
-        }
+            vely = 8;
     }
 }
 export function stop() {
