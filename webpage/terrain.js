@@ -2,29 +2,36 @@ import * as index from './index.js'
 import * as player from './player.js'
 export var terrainCont = new PIXI.Container();
 var map = [
-    '(;BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB()',
-    'LR------------------------------------------------------------------LR',
-    'LR------------------------------------------------------------------LR',
-    'LR------------------------------------------------------------------LR',
-    'LR------------------------------------------------------------------LR',
-    'LR------------------------------------------------------------------LR',
-    'LR------------------------------------------------------------------LR',
-    'LR------------------------------------------------------------------LR',
-    'LR------------------------------------------------------------------LR',
-    'LR------------------------------------------------------------------LR',
-    'L]TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT[R',
-    'LGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGR'    // mostly not visible, but used as base
+    /*I don't usually put this many comments, but here it is necessary as this is the bit I want to be easy to edit for regular people. Key:
+    '(', ')': Top corners, left and right
+    '{', '}': Bottom corners, left and right
+    'T': Top facing ground
+    'B': Bottom facing ground
+    'L', 'R': Left and right facing ground
+    'G': Ground center, not walkable surface
+    ':', ';': Interior corner top, left and right
+    '[', ']': Interior corner bottom, left and right*/
+    '----------------------------------------------------------------------------',
+    '--------------------------------------------------------------------------()',
+    '-----------------------------------------------------------------()-------{}', // Don't put objects players can walk on here, it completely screws with the hitboxes
+    '--------------------------------------------------------()-------{}',
+    '-------------------------------------=---------()-------{}',
+    '--------------------------------------()-------{}',
+    '-----------------------------()-------{}',
+    '--------------------()-------{}',
+    '-----------()-------{}',
+    '--()-------{}',
+    '--{}' // mostly not visible, but used as base
 ]
 var notInContact = true;
 var prevContact;
-var notInContactL = true;
-var prevContactL;
-var velx = 0;
 var blocks = {};
 var left;
 var right;
+var collided;
 export function start() {
     index.app.stage.addChild(terrainCont);
+    console.log(100 * 0 - 80);
     for (let i = 0; i < map.length; i++) {
         var currentPath = map[i];
         for (let e = 0; e < currentPath.length; e++) {
@@ -71,13 +78,16 @@ export function start() {
             }
         }
     }
-    index.app.ticker.add((delta) => {
+    index.app.ticker.add(() => {
         var left = false;
         var right = false;
         let playerBounds = player.player.getBounds();
+        prevContact = notInContact;
+        notInContact = true;
         for (let i = 0; i < terrainCont.children.length; i++) {
             var terrainBounds = terrainCont.children[i].getBounds();
             if (index.collision(terrainBounds, playerBounds)[0]) {
+                notInContact = false;
                 switch (index.collision(playerBounds, terrainBounds)[1]) {
                     case true: // left
                         left = true;
@@ -98,18 +108,12 @@ export function start() {
         }
     });
 }
-export function lefty(delta) {
-    var top = false;
-    var bottom = false;
+export function lefty() {
     var left = false;
-    var right = false;
     let playerBounds = player.player.getBounds();
-    prevContactL = notInContactL;
-    notInContactL = true;
     for (let i = 0; i < terrainCont.children.length; i++) {
         var terrainBounds = terrainCont.children[i].getBounds();
         if (index.collision(terrainBounds, playerBounds)[0]) {
-            notInContactL = false;
             switch (index.collision(playerBounds, terrainBounds)[1]) {
                 case true: // left
                     var left = true;
@@ -117,31 +121,33 @@ export function lefty(delta) {
             }
         }
         var adjustedParams = playerBounds;
-        adjustedParams.x -= 0.001;
+        adjustedParams.x -= 0.1;
         if (index.collision(terrainBounds, adjustedParams)[0]) {
             left = true;
         }
     }
     if (!left) {
-        if (notInContactL == prevContactL) {
-            terrainCont.x += 10;
+        if (index.app.ticker.FPS / 120 > 0.9) {
+            if (notInContact == prevContact) {
+                terrainCont.x += 10;
+            } else {
+                terrainCont.x += 20;
+            }
         } else {
-            terrainCont.x += 20;
+            if (notInContact == prevContact) {
+                terrainCont.x += 10;
+            } else {
+                terrainCont.x += 20;
+            }
         }
     }
 }
-export function righty(delta) {
-    var top = false;
-    var bottom = false;
-    var left = false;
+export function righty() {
     var right = false;
     let playerBounds = player.player.getBounds();
-    prevContact = notInContact;
-    notInContact = true;
     for (let i = 0; i < terrainCont.children.length; i++) {
         var terrainBounds = terrainCont.children[i].getBounds();
         if (index.collision(terrainBounds, playerBounds)[0]) {
-            notInContact = false;
             switch (index.collision(playerBounds, terrainBounds)[1]) {
                 case true: // left
                     var right = true;
@@ -149,16 +155,24 @@ export function righty(delta) {
             }
         }
         var adjustedParams = playerBounds;
-        adjustedParams.x += 0.001;
+        adjustedParams.x += 0.1;
         if (index.collision(terrainBounds, adjustedParams)[0]) {
             right = true;
         }
     }
     if (!right) {
-        if (notInContact == prevContact) {
-            terrainCont.x -= 10;
+        if (index.app.ticker.FPS / 120 > 0.9) {
+            if (notInContact == prevContact) {
+                terrainCont.x -= 10;
+            } else {
+                terrainCont.x -= 20;
+            }
         } else {
-            terrainCont.x -= 20;
+            if (notInContact == prevContact) {
+                terrainCont.x -= 10;
+            } else {
+                terrainCont.x -= 20;
+            }
         }
     }
 }

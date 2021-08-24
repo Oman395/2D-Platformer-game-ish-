@@ -21,24 +21,8 @@ export function collision(ab, bb) {
     ab.y + ab.height > bb.y + bb.height && ab.x + ab.width > bb.x && ab.x < bb.x + bb.width && ab.y + ab.height > bb.y && ab.y < bb.y + bb.height];
 }
 app.ticker.maxFPS = 0;
-app.ticker.speed = 1;
-var currentSpriteL;
-var currentSpriteR;
-app.ticker.add((delta) => {
-    if(app.ticker.FPS < 110) {
-        app.ticker.speed = 0.5;
-    }
-    count++;
-    if (count > 10) {
-        count = 0;
-        if (currentSpriteL == player.sprites[2] && currentSpriteR == player.sprites[3]) {
-            currentSpriteL = player.sprites[4];
-            currentSpriteR = player.sprites[5];
-        } else {
-            currentSpriteL = player.sprites[2];
-            currentSpriteR = player.sprites[3];
-        }
-    }
+export var currentSprites = { "R": player.sprites[3], "L": player.sprites[2] };
+app.ticker.add(() => {
     pastX = Math.round(curX);
     curX = Math.round(terrain.terrainCont.x);
     pastY = Math.round(curY);
@@ -60,23 +44,23 @@ app.ticker.add((delta) => {
         }
     } else if (curY == pastY && curX != pastX) { // moving x
         stopped = false;
-        if (player.canMove) {
-            if (curX - pastX > 0) {
-                if (player.player.texture != currentSpriteR) {
-                    player.player.texture = currentSpriteR;
-                }
-            } else {
-                if (player.player.texture != currentSpriteL) {
-                    player.player.texture = currentSpriteL;
-                }
+        if (curX - pastX > 0) {
+            if (player.player.texture != currentSprites.R) {
+                player.player.texture = currentSprites.R;
+            }
+        } else {
+            if (player.player.texture != currentSprites.L) {
+                player.player.texture = currentSprites.L;
             }
         }
     } else if (curY != pastY && curX == pastX) { // moving y
         stopped = false;
-        if (curY - pastY > 0) {
+        if (curY - pastY > 0) { // up
             player.player.texture = player.sprites[1];
-        } else {
-            player.player.texture = player.sprites[6];
+        } else { // down
+            if (curY - pastY != -0.3876 && curY - pastY != -0.1938) {
+                player.player.texture = player.sprites[6];
+            }
         }
     } else {
         if (stopped == true && player.vely == 0) {
@@ -87,13 +71,13 @@ app.ticker.add((delta) => {
         }
     }
     if (ArrowUp) {
-        player.up(delta);
+        player.up();
     }
     if (ArrowLeft) {
-        terrain.lefty(delta);
+        terrain.lefty();
     }
     if (ArrowRight) {
-        terrain.righty(delta);
+        terrain.righty();
     }
 });
 document.addEventListener('keydown', function (event) {

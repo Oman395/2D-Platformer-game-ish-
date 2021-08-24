@@ -4,46 +4,37 @@ export var sprites = [PIXI.Texture.from('./webpage/images/player-melvin.png'), P
 export var player = PIXI.Sprite.from(sprites[0]);
 export var vely = 0;
 export var Collided = false;
-export var prevCollided = false;
-export var canMove = false;
-var count = 0;
 export var currentLeft = sprites[2];
 export var currentRight = sprites[3];
+var velyChange1 = 8;
+var velyChange2 = 4;
+var curX = Math.round(terrain.terrainCont.x);
+var pastX = Math.round(curX);
+var fullCol = false;
 export function start() {
     player.anchor.set(0.5);
-    player.y = 80;
+    player.y = -100;
     player.x = 200;
     player.width = 100;
     player.height = 100;
     index.app.stage.addChild(player);
     index.app.ticker.add((delta) => {
-        if (count > 10) {
-            count = 0;
-            if (currentLeft == sprites[2]) {
-                currentLeft = sprites[7];
-                currentRight = sprites[8];
-            } else {
-                currentLeft = sprites[2];
-                currentRight = sprites[3];
-            }
-        }
-        count++;
+        Collided = false;
         var top = false;
         var bottom = false;
         var left = false;
         var right = false;
         if (player.y > 1000) {
-            player.y = 80;
+            player.y = -100;
         }
-        vely -= 0.4 * delta;
-        var deltaY;
+        pastX = Math.round(curX);
+        curX = Math.round(terrain.terrainCont.x);
         let playerBounds = player.getBounds();
-        prevCollided = Collided;
-        Collided = true;
+        fullCol = false;
         for (let i = 0; i < terrain.terrainCont.children.length; i++) {
             let terrainBounds = terrain.terrainCont.children[i].getBounds();
             if (index.collision(terrainBounds, playerBounds)[0]) {
-                Collided = false;
+                Collided = true;
                 switch (index.collision(playerBounds, terrainBounds)[1]) {
                     case true: // right
                         var right = true;
@@ -67,6 +58,33 @@ export function start() {
             } else {
             }
         }
+        playerBounds = player.getBounds();
+        for (let i = 0; i < terrain.terrainCont.children.length; i++) {
+            var terrainBounds = terrain.terrainCont.children[i].getBounds();
+            if (index.collision(terrainBounds, playerBounds)[0]) {
+            }
+            var adjustedParams = playerBounds;
+            adjustedParams.y += 1;
+            if (adjustedParams.x + adjustedParams.width > terrainBounds.x
+                && adjustedParams.x < terrainBounds.x + terrainBounds.width
+                && adjustedParams.y + adjustedParams.height > terrainBounds.y
+                && adjustedParams.y < terrainBounds.y + terrainBounds.height,
+                adjustedParams.x + adjustedParams.width > terrainBounds.x + terrainBounds.width
+                && adjustedParams.x + adjustedParams.width > terrainBounds.x
+                && adjustedParams.x < terrainBounds.x + terrainBounds.width
+                && adjustedParams.y + adjustedParams.height > terrainBounds.y
+                && adjustedParams.y < terrainBounds.y + terrainBounds.height,
+                adjustedParams.y + adjustedParams.height > terrainBounds.y + terrainBounds.height
+                && adjustedParams.x + adjustedParams.width > terrainBounds.x
+                && adjustedParams.x < terrainBounds.x + terrainBounds.width
+                && adjustedParams.y + adjustedParams.height > terrainBounds.y
+                && adjustedParams.y < terrainBounds.y + terrainBounds.height) {
+                fullCol = true;
+            }
+        }
+        if (fullCol != true && Collided != true) {
+            vely -= 0.4 * 0.5;
+        }
         if (top) {
         }
         if (bottom) {
@@ -80,18 +98,19 @@ export function start() {
         }
         if (left) {
         }
-        player.y -= vely * delta * 3;
-        if (Collided != prevCollided) {
-            canMove = true;
-        } else if (Collided = true) {
-            canMove = false;
-        }
+        player.y -= vely * 0.5 * 3;
+        //if(player.y < 100) {
+        //    terrain.terrainCont.y -= vely * 0.5 * 3;
+        //}
     });
 }
 export function up(delta) {
     if (vely == 0) {
-        vely = 8;
-        player.y -= 10.5 * delta;
+        if (index.app.ticker.FPS / 120 > 0.9) {
+            vely = velyChange1;
+        } else {
+            vely = velyChange2;
+        }
     }
 }
 export function stop() {
