@@ -1,6 +1,6 @@
 import * as index from "./index.js";
 import * as terrain from "./terrain.js";
-export var sprites = [PIXI.Texture.from('./webpage/images/player-melvin.png'), PIXI.Texture.from('./webpage/images/player-melvin-down.png'), PIXI.Texture.from('./webpage/images/player-melvin-right-f1.png'), PIXI.Texture.from('./webpage/images/player-melvin-left-f1.png'), PIXI.Texture.from('./webpage/images/player-melvin-downr.png'), PIXI.Texture.from('./webpage/images/player-melvin-downl.png'), PIXI.Texture.from('./webpage/images/player-melvin-jump.png'), PIXI.Texture.from('./webpage/images/player-melvin-downr.png'), PIXI.Texture.from('./webpage/images/player-melvin-downl.png'), PIXI.Texture.from('./webpage/images/player-melvin-right-f2.png'), PIXI.Texture.from('./webpage/images/player-melvin-left-f2.png')];
+export var sprites = [PIXI.Texture.from('./images/player-melvin.png'), PIXI.Texture.from('./images/player-melvin-down.png'), PIXI.Texture.from('./images/player-melvin-right-f1.png'), PIXI.Texture.from('./images/player-melvin-left-f1.png'), PIXI.Texture.from('./images/player-melvin-downr.png'), PIXI.Texture.from('./images/player-melvin-downl.png'), PIXI.Texture.from('./images/player-melvin-jump.png'), PIXI.Texture.from('./images/player-melvin-downr.png'), PIXI.Texture.from('./images/player-melvin-downl.png')];
 export var player = PIXI.Sprite.from(sprites[0]);
 export var vely = -1;
 export var Collided = false;
@@ -19,7 +19,7 @@ export function tick() {
     var playerBounds = player.getBounds();
     for (let i = 0; i < terrain.terrainCont.children.length; i++) {
         var terrainBounds = terrain.terrainCont.children[i].getBounds();
-        if (index.collide(playerBounds, terrainBounds)[0] && terrain.terrainCont.children[i].top && vely < 0 && 600 < terrainBounds.y) {
+        if (index.collide(playerBounds, terrainBounds)[0] && vely < 0 && 600 < terrainBounds.y) {
             collided = true;
             vely = 0;
             var deltaY = playerBounds.y - terrainBounds.y + terrainBounds.height;

@@ -16,9 +16,9 @@ var map = [
     Dashes are spaces
     T and () are the only "top" blocks, if the player stands on anything else it WILL cause issues*/
     '---------------------------()',
-    '----------------()---------{}',
-    '--------------()--()',
-    '()---()()---------{}',
+    '-----L----------()---------{}',
+    '-----L--------()--()',
+    '()---L)()---------{}',
     '--(TT----()',
     '--{}-----{}',
     ''
@@ -34,43 +34,43 @@ export function start() {
         for (let e = 0; e < currentPath.length; e++) {
             switch (map[i][e]) {
                 case 'G':
-                    addBlock(`terrain${i}`, e * 100 - 100, 100 * i, './webpage/images/terrain-nograss.png', 0, false);
+                    addBlock(`terrain${i}`, e * 100 - 100, 100 * i, './images/terrain-nograss.png', 0, false);
                     break;
                 case 'T':
-                    addBlock(`terrain${i}`, e * 100 - 100, 100 * i, './webpage/images/terrain.png', 0, true);
+                    addBlock(`terrain${i}`, e * 100 - 100, 100 * i, './images/terrain.png', 0, true);
                     break;
                 case 'L':
-                    addBlock(`terrain${i}`, e * 100 - 100, 100 * i, './webpage/images/terrain.png', 270, false);
+                    addBlock(`terrain${i}`, e * 100 - 100, 100 * i, './images/terrain.png', 270, false);
                     break;
                 case 'R':
-                    addBlock(`terrain${i}`, e * 100 - 100, 100 * i, './webpage/images/terrain.png', 90, false);
+                    addBlock(`terrain${i}`, e * 100 - 100, 100 * i, './images/terrain.png', 90, false);
                     break;
                 case 'B':
-                    addBlock(`terrain${i}`, e * 100 - 100, 100 * i, './webpage/images/terrain.png', 180, false);
+                    addBlock(`terrain${i}`, e * 100 - 100, 100 * i, './images/terrain.png', 180, false);
                     break;
                 case '(':
-                    addBlock(`terrain${i}`, e * 100 - 100, 100 * i, './webpage/images/terrain-corner.png', 0, true);
+                    addBlock(`terrain${i}`, e * 100 - 100, 100 * i, './images/terrain-corner.png', 0, true);
                     break;
                 case ')':
-                    addBlock(`terrain${i}`, e * 100 - 100, 100 * i, './webpage/images/terrain-corner.png', 90, true);
+                    addBlock(`terrain${i}`, e * 100 - 100, 100 * i, './images/terrain-corner.png', 90, true);
                     break;
                 case '{':
-                    addBlock(`terrain${i}`, e * 100 - 100, 100 * i, './webpage/images/terrain-corner.png', 270, false);
+                    addBlock(`terrain${i}`, e * 100 - 100, 100 * i, './images/terrain-corner.png', 270, false);
                     break;
                 case '}':
-                    addBlock(`terrain${i}`, e * 100 - 100, 100 * i, './webpage/images/terrain-corner.png', 180, false);
+                    addBlock(`terrain${i}`, e * 100 - 100, 100 * i, './images/terrain-corner.png', 180, false);
                     break;
                 case ']':
-                    addBlock(`terrain${i}`, e * 100 - 100, 100 * i, './webpage/images/terrain-insidecorner.png', 90, false);
+                    addBlock(`terrain${i}`, e * 100 - 100, 100 * i, './images/terrain-insidecorner.png', 90, false);
                     break;
                 case '[':
-                    addBlock(`terrain${i}`, e * 100 - 100, 100 * i, './webpage/images/terrain-insidecorner.png', false);
+                    addBlock(`terrain${i}`, e * 100 - 100, 100 * i, './images/terrain-insidecorner.png', false);
                     break;
                 case ':':
-                    addBlock(`terrain${i}`, e * 100 - 100, 100 * i, './webpage/images/terrain-insidecorner.png', 270, false);
+                    addBlock(`terrain${i}`, e * 100 - 100, 100 * i, './images/terrain-insidecorner.png', 270, false);
                     break;
                 case ';':
-                    addBlock(`terrain${i}`, e * 100 - 100, 100 * i, './webpage/images/terrain-insidecorner.png', 180, false);
+                    addBlock(`terrain${i}`, e * 100 - 100, 100 * i, './images/terrain-insidecorner.png', 180, false);
                     break;
             }
         }
@@ -91,16 +91,16 @@ export function tick() {
         if (index.collide(playerBounds, terrainBounds)[0]) {
             if (index.collide(playerBounds, terrainBounds)[2]) {
                 velx = 0;
-                //if (playerBounds.x + playerBounds.width > terrainBounds.x && playerBounds.x < terrainBounds.x + terrainBounds.width) {
-                //    console.log(playerBounds, terrainBounds)
-                //    var deltaX = playerBounds.x - terrainBounds.x;
-                //    terrainCont.x -= deltaX;
-                //    console.log(deltaX);
-                //} else if (playerBounds.x > terrainBounds.x) {
-                //    var deltaX = playerBounds.x + playerBounds.width - terrainBounds.x;
-                //    terrainCont.x += deltaX;
-                //    console.log("who");
-                //}
+                if (playerBounds.x + playerBounds.width > terrainBounds.x && !playerBounds.x > terrainBounds.x) {
+                    console.log(playerBounds, terrainBounds)
+                    var deltaX = playerBounds.x - terrainBounds.x;
+                    terrainCont.x -= deltaX;
+                    console.log(deltaX);
+                } else if (playerBounds.x > terrainBounds.x) {
+                    var deltaX = playerBounds.x + playerBounds.width - terrainBounds.x;
+                    terrainCont.x += deltaX;
+                    console.log("who");
+                }
             }
         }
     }

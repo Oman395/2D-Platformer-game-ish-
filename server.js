@@ -6,6 +6,6 @@ var params = {
     root: './',
     logLevel: 0,
     middleware: [function(req, res, next) { next(); }],
-    root: './'
+    root: 'Webpage'
 };
 liveServer.start(params);
