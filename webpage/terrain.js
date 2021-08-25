@@ -1,38 +1,19 @@
 import * as index from './index.js'
 import * as player from './player.js'
+import * as map from "./map.js";
 export var terrainCont = new PIXI.Container();
-var map = [
-    /*I don't usually put this many comments, but here it is necessary as this is the bit I want to be easy to edit for regular people. Key:
-    '(', ')': Top corners, left and right
-    '{', '}': Bottom corners, left and right
-    'T': Top facing ground
-    'B': Bottom facing ground
-    'L', 'R': Left and right facing ground
-    'G': Ground center, not walkable surface
-    ':', ';': Interior corner top, left and right
-    '[', ']': Interior corner bottom, left and right
-    One character is exactly the same size as the player model
-    Add as many lines as you want, the blocks move with the player
-    Dashes are spaces
-    T and () are the only "top" blocks, if the player stands on anything else it WILL cause issues*/
-    '---------------------------()',
-    '-----L----------()---------{}',
-    '-----L--------()--()',
-    '()---L)()---------{}',
-    '--(TT----()',
-    '--{}-----{}',
-    ''
-    //Bottom is  mostly not visible, but used as base
-]
+var left = false;
+var right = false;
 var blocks = {};
+export var maxFall;
 export var velx = 0;
-export var maxFall = 100 * map.length + 400;
-export function start() {
+export function start(mapName) {
+    maxFall = 100 * map.map[mapName].length + 400;
     index.app.stage.addChild(terrainCont);
-    for (let i = 0; i < map.length; i++) {
-        var currentPath = map[i];
+    for (let i = 0; i < map.map[mapName].length; i++) {
+        var currentPath = map.map[mapName][i];
         for (let e = 0; e < currentPath.length; e++) {
-            switch (map[i][e]) {
+            switch (map.map[mapName][i][e]) {
                 case 'G':
                     addBlock(`terrain${i}`, e * 100 - 100, 100 * i, './images/terrain-nograss.png', 0, false);
                     break;
@@ -80,6 +61,49 @@ export function start() {
 var canMoveL = true;
 var canMoveR = true;
 export function tick() {
+    if (left) {
+        var playerBounds = player.player.getBounds();
+        var movement = true;
+        for (let i = 0; i < terrainCont.children.length; i++) {
+            var terrainBounds = terrainCont.children[i].getBounds();
+            playerBounds.x -= 1;
+            if (index.collide(playerBounds, terrainBounds)[0]) {
+                if (index.collide(playerBounds, terrainBounds)[2]) {
+                    movement = false;
+                }
+            }
+        }
+        if (movement) {
+            velx = 8;
+            document.addEventListener("keyup", function (event) {
+                switch (event.key) {
+                    case "a":
+                        if (velx == 8) {
+                            velx = 0;
+                        } break;
+                }
+            });
+        }
+    }
+    if (right) {
+        var playerBounds = player.player.getBounds();
+        var movement = true;
+        for (let i = 0; i < terrainCont.children.length; i++) {
+            var terrainBounds = terrainCont.children[i].getBounds();
+            playerBounds.x += 1;
+            if (index.collide(playerBounds, terrainBounds)[0]) {
+                if (index.collide(playerBounds, terrainBounds)[2]) {
+                    velx = 0;
+                    if (playerBounds.x + playerBounds.width - 10 <= terrainBounds.x + terrainBounds.width) {
+                        movement = false;
+                    }
+                }
+            }
+        }
+        if (movement) {
+            velx = -8;
+        }
+    }
     if (terrainCont.y < -1 * maxFall) {
         terrainCont.y = maxFall + 200;
     }
@@ -92,10 +116,13 @@ export function tick() {
             if (index.collide(playerBounds, terrainBounds)[2]) {
                 velx = 0;
                 if (playerBounds.x + playerBounds.width / 2 < terrainBounds.x + terrainBounds.width / 2) {
-                    playerBounds.x += 1;
-                    var deltaX = (playerBounds.x + playerBounds.width / 2) - (terrainBounds.x + terrainBounds.width / 2);
-                    console.log(deltaX);
-                    terrainCont.x -= deltaX;
+                    playerBounds.x += 0.01;
+                    var deltaX = (playerBounds.x + playerBounds.width) - (terrainBounds.x);
+                    terrainCont.x += deltaX;
+                } else {
+                    playerBounds.x -= 0.01;
+                    var deltaX = (playerBounds.x) - (terrainBounds.x + terrainBounds.width);
+                    terrainCont.x += deltaX;
                 }
             }
         }
@@ -130,56 +157,30 @@ function addBlock(name, x, y, image, angle, top) {
 document.addEventListener("keypress", function (event) {
     switch (event.key) {
         case "a":
-            var playerBounds = player.player.getBounds();
-            var movement = true;
-            for (let i = 0; i < terrainCont.children.length; i++) {
-                var terrainBounds = terrainCont.children[i].getBounds();
-                playerBounds.x -= 1;
-                if (index.collide(playerBounds, terrainBounds)[0]) {
-                    if (index.collide(playerBounds, terrainBounds)[2]) {
-                        movement = false;
-                    }
+            left = true;
+            document.addEventListener("keyup", function (event) {
+                switch (event.key) {
+                    case "a":
+                        if (!right) {
+                            velx = 0;
+                        }
+                        left = false;
+                        break;
                 }
-            }
-            if (movement) {
-                velx = 8;
-                document.addEventListener("keyup", function (event) {
-                    switch (event.key) {
-                        case "a":
-                            if (velx == 8) {
-                                velx = 0;
-                            } break;
-                    }
-                });
-            }
-            break;
+            });
             break;
         case "d":
-            var playerBounds = player.player.getBounds();
-            var movement = true;
-            for (let i = 0; i < terrainCont.children.length; i++) {
-                var terrainBounds = terrainCont.children[i].getBounds();
-                playerBounds.x += 1;
-                if (index.collide(playerBounds, terrainBounds)[0]) {
-                    if (index.collide(playerBounds, terrainBounds)[2]) {
-                        velx = 0;
-                        if (playerBounds.x + playerBounds.width - 10 <= terrainBounds.x + terrainBounds.width) {
-                            movement = false;
+            right = true;
+            document.addEventListener("keyup", function (event) {
+                switch (event.key) {
+                    case "d":
+                        if (!left) {
+                            velx = 0;
                         }
-                    }
+                        right = false;
+                        break;
                 }
-            }
-            if (movement) {
-                velx = -8;
-                document.addEventListener("keyup", function (event) {
-                    switch (event.key) {
-                        case "d":
-                            if (velx == -8) {
-                                velx = 0;
-                            } break;
-                    }
-                });
-            }
+            });
             break;
     }
 });

@@ -6,7 +6,7 @@ var ArrowRight = false;
 export var app = new PIXI.Application({ resizeTo: document.getElementById("PIXI"), backgroundColor: 0xafafaf, antialiasing: true, view: document.getElementById("PIXI") });
 document.body.appendChild(app.view);
 app.stage.interactive = true;
-(player.start(), terrain.start(), () => {
+(player.start(), terrain.start(1), () => {
 })();
 export function collide(ab, bb) {
     return [ab.x + ab.width > bb.x && ab.x < bb.x + bb.width && ab.y + ab.height > bb.y && ab.y < bb.y + bb.height,
