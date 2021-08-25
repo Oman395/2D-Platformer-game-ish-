@@ -10,179 +10,105 @@ var map = [
     'L', 'R': Left and right facing ground
     'G': Ground center, not walkable surface
     ':', ';': Interior corner top, left and right
-    '[', ']': Interior corner bottom, left and right*/
-    '----------------------------------------------------------------------------',
-    '--------------------------------------------------------------------------()',
-    '-----------------------------------------------------------------()-------{}', // Don't put objects players can walk on here, it completely screws with the hitboxes
-    '--------------------------------------------------------()-------{}',
-    '-------------------------------------=---------()-------{}',
-    '--------------------------------------()-------{}',
-    '-----------------------------()-------{}',
-    '--------------------()-------{}',
-    '-----------()-------{}',
-    '--()-------{}',
-    '--{}' // mostly not visible, but used as base
+    '[', ']': Interior corner bottom, left and right
+    One character is exactly the same size as the player model
+    Add as many lines as you want, the blocks move with the player
+    Dashes are spaces
+    T and () are the only "top" blocks, if the player stands on anything else it WILL cause issues*/
+    '---------------------------()',
+    '---------------------------{}',
+    '------------------()',
+    '---()-------------{}',
+    '--({}----()',
+    '--{}-----{}',
+    ''
+    //Bottom is  mostly not visible, but used as base
 ]
-var notInContact = true;
-var prevContact;
 var blocks = {};
-var left;
-var right;
-var collided;
+export var velx = 0;
+export var maxFall = 100 * map.length + 400;
 export function start() {
     index.app.stage.addChild(terrainCont);
-    console.log(100 * 0 - 80);
     for (let i = 0; i < map.length; i++) {
         var currentPath = map[i];
         for (let e = 0; e < currentPath.length; e++) {
             switch (map[i][e]) {
                 case 'G':
-                    addBlock(`terrain${i}`, e * 100 - 100, 100 * i - 80, './webpage/images/terrain-nograss.png');
+                    addBlock(`terrain${i}`, e * 100 - 100, 100 * i, './webpage/images/terrain-nograss.png', 0, false);
                     break;
                 case 'T':
-                    addBlock(`terrain${i}`, e * 100 - 100, 100 * i - 80, './webpage/images/terrain.png');
+                    addBlock(`terrain${i}`, e * 100 - 100, 100 * i, './webpage/images/terrain.png', 0, true);
                     break;
                 case 'L':
-                    addBlock(`terrain${i}`, e * 100 - 100, 100 * i - 80, './webpage/images/terrain.png', 270);
+                    addBlock(`terrain${i}`, e * 100 - 100, 100 * i, './webpage/images/terrain.png', 270, false);
                     break;
                 case 'R':
-                    addBlock(`terrain${i}`, e * 100 - 100, 100 * i - 80, './webpage/images/terrain.png', 90);
+                    addBlock(`terrain${i}`, e * 100 - 100, 100 * i, './webpage/images/terrain.png', 90, false);
                     break;
                 case 'B':
-                    addBlock(`terrain${i}`, e * 100 - 100, 100 * i - 80, './webpage/images/terrain.png', 180);
+                    addBlock(`terrain${i}`, e * 100 - 100, 100 * i, './webpage/images/terrain.png', 180, false);
                     break;
                 case '(':
-                    addBlock(`terrain${i}`, e * 100 - 100, 100 * i - 80, './webpage/images/terrain-corner.png');
+                    addBlock(`terrain${i}`, e * 100 - 100, 100 * i, './webpage/images/terrain-corner.png', 0, true);
                     break;
                 case ')':
-                    addBlock(`terrain${i}`, e * 100 - 100, 100 * i - 80, './webpage/images/terrain-corner.png', 90);
+                    addBlock(`terrain${i}`, e * 100 - 100, 100 * i, './webpage/images/terrain-corner.png', 90, true);
                     break;
                 case '{':
-                    addBlock(`terrain${i}`, e * 100 - 100, 100 * i - 80, './webpage/images/terrain-corner.png', 270);
+                    addBlock(`terrain${i}`, e * 100 - 100, 100 * i, './webpage/images/terrain-corner.png', 270, false);
                     break;
                 case '}':
-                    addBlock(`terrain${i}`, e * 100 - 100, 100 * i - 80, './webpage/images/terrain-corner.png', 180);
+                    addBlock(`terrain${i}`, e * 100 - 100, 100 * i, './webpage/images/terrain-corner.png', 180, false);
                     break;
                 case ']':
-                    addBlock(`terrain${i}`, e * 100 - 100, 100 * i - 80, './webpage/images/terrain-insidecorner.png', 90);
+                    addBlock(`terrain${i}`, e * 100 - 100, 100 * i, './webpage/images/terrain-insidecorner.png', 90, false);
                     break;
                 case '[':
-                    addBlock(`terrain${i}`, e * 100 - 100, 100 * i - 80, './webpage/images/terrain-insidecorner.png');
+                    addBlock(`terrain${i}`, e * 100 - 100, 100 * i, './webpage/images/terrain-insidecorner.png', false);
                     break;
                 case ':':
-                    addBlock(`terrain${i}`, e * 100 - 100, 100 * i - 80, './webpage/images/terrain-insidecorner.png', 270);
+                    addBlock(`terrain${i}`, e * 100 - 100, 100 * i, './webpage/images/terrain-insidecorner.png', 270, false);
                     break;
                 case ';':
-                    addBlock(`terrain${i}`, e * 100 - 100, 100 * i - 80, './webpage/images/terrain-insidecorner.png', 180);
+                    addBlock(`terrain${i}`, e * 100 - 100, 100 * i, './webpage/images/terrain-insidecorner.png', 180, false);
                     break;
             }
         }
     }
-    index.app.ticker.add((delta) => {
-        console.log(120 / index.app.ticker.FPS);
-        var left = false;
-        var right = false;
-        let playerBounds = player.player.getBounds();
-        prevContact = notInContact;
-        notInContact = true;
-        for (let i = 0; i < terrainCont.children.length; i++) {
-            var terrainBounds = terrainCont.children[i].getBounds();
-            if (index.collision(terrainBounds, playerBounds)[0]) {
-                notInContact = false;
-                switch (index.collision(playerBounds, terrainBounds)[1]) {
-                    case true: // left
-                        left = true;
-                        break;
-                    case false: // right
-                        right = true;
-                        break;
-                }
-                if (playerBounds.y + playerBounds.height > terrainBounds.y + terrainBounds.height) {
-                    var cont = true;
-                    if (left) {
-                        terrainCont.x--;
-                    } else if (right) {
-                        terrainCont.x++;
-                    }
+    terrainCont.y = maxFall;
+}
+var canMoveL = true;
+var canMoveR = true;
+export function tick() {
+    if (terrainCont.y < -1 * maxFall) {
+        terrainCont.y = maxFall + 200;
+    }
+    terrainCont.y += player.vely;
+    terrainCont.x += velx;
+    var playerBounds = player.player.getBounds();
+    for (let i = 0; i < terrainCont.children.length; i++) {
+        var terrainBounds = terrainCont.children[i].getBounds();
+        if (index.collide(playerBounds, terrainBounds)[0]) {
+            if (index.collide(playerBounds, terrainBounds)[2]) {
+                velx = 0;
+                if (playerBounds.x < terrainBounds.x + terrainBounds.width) {
+                    var deltaX = playerBounds.x - terrainBounds.x + terrainBounds.width;
+                    terrainCont.x += deltaX;
+                } else if (playerBounds.x + playerBounds.width < terrainBounds.x) {
+                    var deltaX = playerBounds.x + playerBounds.width - terrainBounds.x;
+                    terrainCont.x += deltaX;
                 }
             }
         }
-    });
-}
-export function lefty() {
-    var left = false;
-    let playerBounds = player.player.getBounds();
-    for (let i = 0; i < terrainCont.children.length; i++) {
-        var terrainBounds = terrainCont.children[i].getBounds();
-        if (index.collision(terrainBounds, playerBounds)[0]) {
-            switch (index.collision(playerBounds, terrainBounds)[1]) {
-                case true: // left
-                    var left = true;
-                    break;
-            }
-        }
-        var adjustedParams = playerBounds;
-        adjustedParams.x -= 0.1;
-        if (index.collision(terrainBounds, adjustedParams)[0]) {
-            left = true;
-        }
-    }
-    if (!left) {
-        if (index.app.ticker.FPS / 120 > 0.9) {
-            if (notInContact == prevContact) {
-                terrainCont.x += 10;
-            } else {
-                terrainCont.x += 20;
-            }
-        } else {
-            if (notInContact == prevContact) {
-                terrainCont.x += 10;
-            } else {
-                terrainCont.x += 20;
-            }
-        }
     }
 }
-export function righty() {
-    var right = false;
-    let playerBounds = player.player.getBounds();
-    for (let i = 0; i < terrainCont.children.length; i++) {
-        var terrainBounds = terrainCont.children[i].getBounds();
-        if (index.collision(terrainBounds, playerBounds)[0]) {
-            switch (index.collision(playerBounds, terrainBounds)[1]) {
-                case true: // left
-                    var right = true;
-                    break;
-            }
-        }
-        var adjustedParams = playerBounds;
-        adjustedParams.x += 0.1;
-        if (index.collision(terrainBounds, adjustedParams)[0]) {
-            right = true;
-        }
-    }
-    if (!right) {
-        if (index.app.ticker.FPS / 120 > 0.9) {
-            if (notInContact == prevContact) {
-                terrainCont.x -= 10;
-            } else {
-                terrainCont.x -= 20;
-            }
-        } else {
-            if (notInContact == prevContact) {
-                terrainCont.x -= 10;
-            } else {
-                terrainCont.x -= 20;
-            }
-        }
-    }
-}
-function addBlock(name, x, y, image, angle) {
+function addBlock(name, x, y, image, angle, top) {
     blocks[name] = new PIXI.Sprite.from(image);
     blocks[name].y = y;
     blocks[name].x = x;
     blocks[name].width = 100;
     blocks[name].height = 100;
+    blocks[name].top = top;
     if (angle) {
         switch (angle) {
             case 90:
@@ -202,3 +128,60 @@ function addBlock(name, x, y, image, angle) {
     }
     terrainCont.addChild(blocks[name]);
 }
+document.addEventListener("keypress", function (event) {
+    switch (event.key) {
+        case "a":
+            var playerBounds = player.player.getBounds();
+            var movement = true;
+            for (let i = 0; i < terrainCont.children.length; i++) {
+                var terrainBounds = terrainCont.children[i].getBounds();
+                playerBounds.x -= 1;
+                if (index.collide(playerBounds, terrainBounds)[0]) {
+                    if (index.collide(playerBounds, terrainBounds)[2]) {
+                        velx = 0;
+                        var terrainBounds = terrainCont.children[i].getBounds();
+                        var playerBounds = player.player.getBounds();
+                    }
+                }
+            }
+            if (movement) {
+                velx = 8;
+                document.addEventListener("keyup", function (event) {
+                    switch (event.key) {
+                        case "a":
+                            if (velx == 8) {
+                                velx = 0;
+                            } break;
+                    }
+                });
+            }
+            break;
+        case "d":
+            var playerBounds = player.player.getBounds();
+            var movement = true;
+            for (let i = 0; i < terrainCont.children.length; i++) {
+                var terrainBounds = terrainCont.children[i].getBounds();
+                playerBounds.x += 1;
+                if (index.collide(playerBounds, terrainBounds)[0]) {
+                    if (index.collide(playerBounds, terrainBounds)[2]) {
+                        velx = 0;
+                        if (playerBounds.x + playerBounds.width - 10 <= terrainBounds.x + terrainBounds.width) {
+                            movement = false;
+                        }
+                    }
+                }
+            }
+            if (movement) {
+                velx = -8;
+                document.addEventListener("keyup", function (event) {
+                    switch (event.key) {
+                        case "d":
+                            if (velx == -8) {
+                                velx = 0;
+                            } break;
+                    }
+                });
+            }
+            break;
+    }
+});
