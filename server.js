@@ -1,5 +1,7 @@
 var liveServer = require("live-server");
 var params = {
+    port: 8181,
+    host: "0.0.0.0",
     file: "./webpage/index.html",
     wait: 1000,
     mount: ['./webpage'],

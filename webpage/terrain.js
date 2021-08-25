@@ -91,15 +91,11 @@ export function tick() {
         if (index.collide(playerBounds, terrainBounds)[0]) {
             if (index.collide(playerBounds, terrainBounds)[2]) {
                 velx = 0;
-                if (playerBounds.x + playerBounds.width > terrainBounds.x && !playerBounds.x > terrainBounds.x) {
-                    console.log(playerBounds, terrainBounds)
-                    var deltaX = playerBounds.x - terrainBounds.x;
-                    terrainCont.x -= deltaX;
+                if (playerBounds.x + playerBounds.width / 2 < terrainBounds.x + terrainBounds.width / 2) {
+                    playerBounds.x += 1;
+                    var deltaX = (playerBounds.x + playerBounds.width / 2) - (terrainBounds.x + terrainBounds.width / 2);
                     console.log(deltaX);
-                } else if (playerBounds.x > terrainBounds.x) {
-                    var deltaX = playerBounds.x + playerBounds.width - terrainBounds.x;
-                    terrainCont.x += deltaX;
-                    console.log("who");
+                    terrainCont.x -= deltaX;
                 }
             }
         }
