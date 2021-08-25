@@ -1,19 +1,23 @@
 import * as terrain from "./terrain.js";
 import * as index from "./index.js";
 export var sprites = [PIXI.Texture.from('./images/player-melvin.png'), PIXI.Texture.from('./images/player-melvin-down.png'), PIXI.Texture.from('./images/player-melvin-right-f1.png'), PIXI.Texture.from('./images/player-melvin-left-f1.png'), PIXI.Texture.from('./images/player-melvin-downr.png'), PIXI.Texture.from('./images/player-melvin-downl.png'), PIXI.Texture.from('./images/player-melvin-jump.png'), PIXI.Texture.from('./images/player-melvin-downr.png'), PIXI.Texture.from('./images/player-melvin-downl.png')];
-export var player = PIXI.Sprite.from(sprites[0]);
+export var player;
 export var vely = -1;
 export var Collided = false;
 export var currentLeft = sprites[2];
 export var currentRight = sprites[3];
 export var up = false;
 export function start() {
+    player = PIXI.Sprite.from(sprites[0]);
     player.anchor.set(0.5);
     player.y = 600;
     player.x = 200;
     player.width = 100;
     player.height = 100;
     index.app.stage.addChild(player);
+}
+export function stop() {
+    player.visible = false;
 }
 export function tick() {
     if (up) {

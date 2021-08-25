@@ -1,14 +1,15 @@
 import * as index from './index.js'
 import * as player from './player.js'
 import * as map from "./map.js";
-export var terrainCont = new PIXI.Container();
+export var terrainCont;
 var left = false;
 var right = false;
 var blocks = {};
 export var maxFall;
 export var velx = 0;
-export function start(mapName) {
+export function start(mapName, tx, ty) {
     maxFall = 100 * map.map[mapName].length + 400;
+    terrainCont = new PIXI.Container();
     index.app.stage.addChild(terrainCont);
     for (let i = 0; i < map.map[mapName].length; i++) {
         var currentPath = map.map[mapName][i];
@@ -56,7 +57,14 @@ export function start(mapName) {
             }
         }
     }
-    terrainCont.y = maxFall;
+    terrainCont.y = ty;
+    terrainCont.x = tx;
+    if (ty == 0) {
+        terrainCont.y = maxFall;
+    }
+}
+export function stop() {
+    terrainCont.visible = false;
 }
 var canMoveL = true;
 var canMoveR = true;

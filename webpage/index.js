@@ -1,19 +1,31 @@
 import * as player from "./player.js";
 import * as terrain from "./terrain.js";
-var ArrowUp = false;
-var ArrowLeft = false;
-var ArrowRight = false;
+import * as ticker from "./ticker.js";
+import * as menu from "./menu.js";
+var firstStart = false;
 export var app = new PIXI.Application({ resizeTo: document.getElementById("PIXI"), backgroundColor: 0xafafaf, antialiasing: true, view: document.getElementById("PIXI") });
 document.body.appendChild(app.view);
-app.stage.interactive = true;
-(player.start(), terrain.start(1), () => {
-})();
+export function start(map, px, py) {
+    app.stage.interactive = true;
+    if (firstStart) {
+        (player.start(), terrain.start(map, px, py), () => {
+        })();
+    } else {
+        (player.start(), terrain.start(map, px, py), ticker.start(), () => {
+            firstStart = true;
+        })();
+    }
+}
+export function stop() {
+    (player.stop(), terrain.stop(), () => {
+    })();
+}
+export var currentSprites = { "R": player.sprites[3], "L": player.sprites[2] };
 export function collide(ab, bb) {
     return [ab.x + ab.width > bb.x && ab.x < bb.x + bb.width && ab.y + ab.height > bb.y && ab.y < bb.y + bb.height,
     ab.x + ab.width > bb.x + bb.width && ab.x + ab.width > bb.x && ab.x < bb.x + bb.width && ab.y + ab.height > bb.y && ab.y < bb.y + bb.height,
     ab.y + ab.height > bb.y + bb.height && ab.x + ab.width > bb.x && ab.x < bb.x + bb.width && ab.y + ab.height > bb.y && ab.y < bb.y + bb.height];
 }
-export var currentSprites = { "R": player.sprites[3], "L": player.sprites[2] };
 export function tick() {
     switch (player.vely == 0) {
         case true: // y not moving
@@ -73,3 +85,4 @@ export function tick() {
             break;
     }
 }
+menu.startUp(0, 0);
