@@ -16,10 +16,10 @@ var map = [
     Dashes are spaces
     T and () are the only "top" blocks, if the player stands on anything else it WILL cause issues*/
     '---------------------------()',
-    '---------------------------{}',
-    '------------------()',
-    '---()-------------{}',
-    '--({}----()',
+    '----------------()---------{}',
+    '--------------()--()',
+    '()---()()---------{}',
+    '--(TT----()',
     '--{}-----{}',
     ''
     //Bottom is  mostly not visible, but used as base
@@ -91,13 +91,16 @@ export function tick() {
         if (index.collide(playerBounds, terrainBounds)[0]) {
             if (index.collide(playerBounds, terrainBounds)[2]) {
                 velx = 0;
-                if (playerBounds.x < terrainBounds.x + terrainBounds.width) {
-                    var deltaX = playerBounds.x - terrainBounds.x + terrainBounds.width;
-                    terrainCont.x += deltaX;
-                } else if (playerBounds.x + playerBounds.width < terrainBounds.x) {
-                    var deltaX = playerBounds.x + playerBounds.width - terrainBounds.x;
-                    terrainCont.x += deltaX;
-                }
+                //if (playerBounds.x + playerBounds.width > terrainBounds.x && playerBounds.x < terrainBounds.x + terrainBounds.width) {
+                //    console.log(playerBounds, terrainBounds)
+                //    var deltaX = playerBounds.x - terrainBounds.x;
+                //    terrainCont.x -= deltaX;
+                //    console.log(deltaX);
+                //} else if (playerBounds.x > terrainBounds.x) {
+                //    var deltaX = playerBounds.x + playerBounds.width - terrainBounds.x;
+                //    terrainCont.x += deltaX;
+                //    console.log("who");
+                //}
             }
         }
     }
@@ -138,9 +141,7 @@ document.addEventListener("keypress", function (event) {
                 playerBounds.x -= 1;
                 if (index.collide(playerBounds, terrainBounds)[0]) {
                     if (index.collide(playerBounds, terrainBounds)[2]) {
-                        velx = 0;
-                        var terrainBounds = terrainCont.children[i].getBounds();
-                        var playerBounds = player.player.getBounds();
+                        movement = false;
                     }
                 }
             }
@@ -155,6 +156,7 @@ document.addEventListener("keypress", function (event) {
                     }
                 });
             }
+            break;
             break;
         case "d":
             var playerBounds = player.player.getBounds();
