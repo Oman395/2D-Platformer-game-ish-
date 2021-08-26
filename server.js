@@ -8,6 +8,7 @@ var params = {
     root: './',
     logLevel: 0,
     middleware: [function(req, res, next) { next(); }],
-    root: 'Webpage'
+    root: 'Webpage',
+    watch: 'Webpage'
 };
 liveServer.start(params);
