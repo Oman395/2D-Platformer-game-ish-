@@ -8,13 +8,14 @@ export var Collided = false;
 export var currentLeft = sprites[2];
 export var currentRight = sprites[3];
 export var up = false;
-export function start() {
+export function start(vy) {
     player = PIXI.Sprite.from(sprites[0]);
     player.anchor.set(0.5);
     player.y = 600;
     player.x = 200;
     player.width = 100;
     player.height = 100;
+    vely = vy;
     index.app.stage.addChild(player);
 }
 export function stop() {

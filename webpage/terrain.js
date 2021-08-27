@@ -7,7 +7,7 @@ var right = false;
 var blocks = {};
 export var maxFall;
 export var velx = 0;
-export function start(mapName, tx, ty) {
+export function start(mapName, tx, ty, vx) {
     maxFall = 100 * map.map[mapName].length + 400;
     terrainCont = new PIXI.Container();
     index.app.stage.addChild(terrainCont);
@@ -62,6 +62,7 @@ export function start(mapName, tx, ty) {
     if (ty == 0) {
         terrainCont.y = maxFall;
     }
+    velx = vx;
 }
 export function stop() {
     terrainCont.visible = false;
