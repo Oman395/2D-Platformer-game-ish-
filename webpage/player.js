@@ -38,7 +38,7 @@ export function tick() {
             }
             var deltaY = playerBounds.y - terrainBounds.y + terrainBounds.height;
             terrain.terrainCont.y += deltaY - 0.1;
-        } else if(index.collide(playerBounds, terrainBounds)[0] && playerBounds.y < terrainBounds.y) {
+        } else if (index.collide(playerBounds, terrainBounds)[0] && playerBounds.y > terrainBounds.y) {
             collided = true;
             vely *= -1;
             terrain.terrainCont.y -= 10;
