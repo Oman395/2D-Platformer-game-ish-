@@ -121,7 +121,7 @@ export function tick() {
     for (let i = 0; i < terrainCont.children.length; i++) {
         var terrainBounds = terrainCont.children[i].getBounds();
         if (index.collide(playerBounds, terrainBounds)[0]) {
-            if (index.collide(playerBounds, terrainBounds)[2]) {
+            if (index.collide(playerBounds, terrainBounds)[2] && playerBounds.y <= terrainBounds.y + terrainBounds.height / 2) {
                 velx = 0;
                 if (playerBounds.x + playerBounds.width / 2 < terrainBounds.x + terrainBounds.width / 2) {
                     playerBounds.x += 0.01;

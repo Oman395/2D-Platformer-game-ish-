@@ -22,8 +22,7 @@ export var map = [
         //Bottom is  mostly not visible, but used as base
     ],
     [ // Extra space here for when I start working on menus and levels
-        '----BBBBBB----------------------------()',
-        '',
+        '--------------------------------------()',
         '----------------------------()--------{}',
         '--(TTTTTT)--------()--------{}',
         '--L;BBBBB}--------{}',
