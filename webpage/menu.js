@@ -23,7 +23,7 @@ export function startUp(px, py) {
             sprites[i] = addMenuOption(window.innerWidth / 2, 150 * i + 150, 300, sprites[i]);
             index.app.stage.addChild(sprites[i]);
         }
-        sprites[2].on('pointerdown', () => {
+        sprites[1].on('pointerdown', () => {
             index.start(1, px, py, velx, vely);
             for (let i = 0; i < sprites.length; i++) {
                 sprites[i].visible = false;
