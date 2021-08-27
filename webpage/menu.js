@@ -1,9 +1,6 @@
 import * as index from "./index.js"
 import * as terrain from "./terrain.js"
 import * as player from "./player.js"
-var menu;
-var start;
-var about;
 var x = 0;
 var y = 0;
 var velx = 0;
@@ -12,23 +9,23 @@ var menuOn = false;
 var sprites = [PIXI.Sprite.from("./images/menu.png"),
 PIXI.Sprite.from("./images/start.png"),
 PIXI.Sprite.from("./images/about.png")]
-export function startUp(px, py) {
+export function startUp() {
     if (!menuOn) {
-        console.log(py);
         menuOn = true;
         for (let i = 0; i < sprites.length; i++) {
-            console.log(i);
             sprites[i].buttonMode = true;
             sprites[i].interactive = true;
             sprites[i] = addMenuOption(window.innerWidth / 2, 150 * i + 150, 300, sprites[i]);
             index.app.stage.addChild(sprites[i]);
         }
         sprites[1].on('pointerdown', () => {
-            index.start(1, px, py, velx, vely);
-            for (let i = 0; i < sprites.length; i++) {
-                sprites[i].visible = false;
+            if (menuOn) {
+                index.start(1, x, y, vely);
+                for (let i = 0; i < sprites.length; i++) {
+                    sprites[i].visible = false;
+                }
+                menuOn = false;
             }
-            menuOn = false;
         });
     }
 }
@@ -39,7 +36,7 @@ document.addEventListener("keydown", function (event) {
         velx = terrain.velx;
         vely = player.vely;
         index.stop();
-        startUp(x, y);
+        startUp();
     }
 });
 function addMenuOption(x, y, width, sprite) {
@@ -48,5 +45,6 @@ function addMenuOption(x, y, width, sprite) {
     sprite.x = x;
     sprite.width = width;
     sprite.height = 100;
+    sprite.visible = true;
     return (sprite);
 }

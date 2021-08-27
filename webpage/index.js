@@ -6,13 +6,13 @@ var firstStart = false;
 export var app = new PIXI.Application({ resizeTo: document.getElementById("PIXI"), backgroundColor: 0xafafaf, antialiasing: true, view: document.getElementById("PIXI") });
 PIXI.settings.ANISOTROPIC_LEVEL = 16;
 document.body.appendChild(app.view);
-export function start(map, px, py, vx, vy) {
+export function start(map, px, py, vy) {
     app.stage.interactive = true;
     if (firstStart) {
-        (player.start(vy), terrain.start(map, px, py, vx), () => {
+        (player.start(vy), terrain.start(map, px, py), () => {
         })();
     } else {
-        (player.start(vy), terrain.start(map, px, py, vx), ticker.start(), () => {
+        (player.start(vy), terrain.start(map, px, py), ticker.start(), () => {
             firstStart = true;
         })();
     }
@@ -86,4 +86,4 @@ export function tick() {
             break;
     }
 }
-menu.startUp(0, 0);
+menu.startUp();
