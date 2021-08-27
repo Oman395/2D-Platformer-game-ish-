@@ -9,26 +9,21 @@ var y = 0;
 var velx = 0;
 var vely = 0;
 var menuOn = false;
+var sprites = [PIXI.Sprite.from("./images/menu.png"),
+PIXI.Sprite.from("./images/start.png"),
+PIXI.Sprite.from("./images/about.png")]
 export function startUp(px, py) {
     if (!menuOn) {
         console.log(py);
         menuOn = true;
-        menu = PIXI.Sprite.from("./images/menu.png");
-        start = PIXI.Sprite.from("./images/start.png");
-        about = PIXI.Sprite.from("./images/about.png");
-        menu = addMenuOption(window.innerWidth / 2, 150, 266, menu);
-        start = addMenuOption(window.innerWidth / 2, 300, 333, start);
-        about = addMenuOption(window.innerWidth / 2, 450, 322, about);
-        menu.buttonMode = true;
-        start.buttonMode = true;
-        about.buttonMode = true;
-        menu.interactive = true;
-        start.interactive = true;
-        about.interactive = true;
-        index.app.stage.addChild(menu);
-        index.app.stage.addChild(start);
-        index.app.stage.addChild(about);
-        start.on('pointerdown', () => {
+        for (let i = 0; i < sprites.length; i++) {
+            console.log(i);
+            sprites[i].buttonMode = true;
+            sprites[i].interactive = true;
+            sprites[i] = addMenuOption(window.innerWidth / 2, 150 * i + 150, sprites[i]);
+            index.app.stage.addChild(sprites[i]);
+        }
+        sprites[2].on('pointerdown', () => {
             index.start(1, px, py, velx, vely);
             menu.visible = false;
             start.visible = false;
