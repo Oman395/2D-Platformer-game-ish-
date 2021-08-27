@@ -20,14 +20,14 @@ export function startUp(px, py) {
             console.log(i);
             sprites[i].buttonMode = true;
             sprites[i].interactive = true;
-            sprites[i] = addMenuOption(window.innerWidth / 2, 150 * i + 150, sprites[i]);
+            sprites[i] = addMenuOption(window.innerWidth / 2, 150 * i + 150, 300, sprites[i]);
             index.app.stage.addChild(sprites[i]);
         }
         sprites[2].on('pointerdown', () => {
             index.start(1, px, py, velx, vely);
-            menu.visible = false;
-            start.visible = false;
-            about.visible = false;
+            for (let i = 0; i < sprites.length; i++) {
+                sprites[i].visible = false;
+            }
             menuOn = false;
         });
     }
