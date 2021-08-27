@@ -1,10 +1,13 @@
 import * as index from "./index.js"
 import * as terrain from "./terrain.js"
+import * as player from "./player.js"
 var menu;
 var start;
 var about;
 var x = 0;
 var y = 0;
+var velx = 0;
+var vely = 0;
 var menuOn = false;
 export function startUp(px, py) {
     if (!menuOn) {
@@ -26,7 +29,7 @@ export function startUp(px, py) {
         index.app.stage.addChild(start);
         index.app.stage.addChild(about);
         start.on('pointerdown', () => {
-            index.start(1, px, py);
+            index.start(1, px, py, velx, vely);
             menu.visible = false;
             start.visible = false;
             about.visible = false;
@@ -38,7 +41,8 @@ document.addEventListener("keydown", function (event) {
     if (event.key == "Escape") {
         x = terrain.terrainCont.x;
         y = terrain.terrainCont.y;
-        console.log(x, y);
+        velx = terrain.velx;
+        vely = player.vely;
         index.stop();
         startUp(x, y);
     }

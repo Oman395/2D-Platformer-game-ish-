@@ -5,13 +5,13 @@ import * as menu from "./menu.js";
 var firstStart = false;
 export var app = new PIXI.Application({ resizeTo: document.getElementById("PIXI"), backgroundColor: 0xafafaf, antialiasing: true, view: document.getElementById("PIXI") });
 document.body.appendChild(app.view);
-export function start(map, px, py) {
+export function start(map, px, py, vx, vy) {
     app.stage.interactive = true;
     if (firstStart) {
-        (player.start(), terrain.start(map, px, py), () => {
+        (player.start(vy), terrain.start(map, px, py, vx), () => {
         })();
     } else {
-        (player.start(), terrain.start(map, px, py), ticker.start(), () => {
+        (player.start(vy), terrain.start(map, px, py, vx), ticker.start(), () => {
             firstStart = true;
         })();
     }
