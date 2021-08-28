@@ -13,6 +13,7 @@ export var map = [
         Add as many lines as you want, the blocks move with the player
         Dashes are spaces
         Farthest jump is ~9 spaces but farthest not horrible is 8
+        Currently working on a start pos but it's uh... not fun
         Have fun, and mess around!*/
         '--------------------------------()',
         '----------------------()--------{}',

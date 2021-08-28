@@ -4,7 +4,6 @@ import * as ticker from "./ticker.js";
 import * as menu from "./menu.js";
 var firstStart = false;
 export var app = new PIXI.Application({ resizeTo: document.getElementById("PIXI"), backgroundColor: 0xafafaf, antialiasing: true, view: document.getElementById("PIXI") });
-PIXI.settings.ANISOTROPIC_LEVEL = 16;
 document.body.appendChild(app.view);
 export function start(map, px, py, vy) {
     app.stage.interactive = true;

@@ -66,8 +66,6 @@ export function start(mapName, tx, ty) {
 export function stop() {
     terrainCont.visible = false;
 }
-var canMoveL = true;
-var canMoveR = true;
 export function tick() {
     if (left) {
         var playerBounds = player.player.getBounds();
