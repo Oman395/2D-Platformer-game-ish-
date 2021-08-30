@@ -45,7 +45,7 @@ export function tick() {
         }
     }
     if (vely != 0 || !collided) {
-        vely -= 0.13;
+        vely -= 0.14;
     }
 }
 document.addEventListener("keypress", function (event) {

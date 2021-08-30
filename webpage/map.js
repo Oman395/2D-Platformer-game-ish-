@@ -23,7 +23,8 @@ export var map = [
         //Bottom is  mostly not visible, but used as base
     ],
     [ // Extra space here for when I start working on menus and levels
-        '--------------------------------------()',
+        '------------------------------------------------()',
+        '--------------------------------------()--------{}', // This jump length is about the max you can jump with no x error, might want to move further for going back down.
         '----------------------------()--------{}',
         '--(TTTTTT)--------()--------{}',
         '--L;BBBBB}--------{}',
