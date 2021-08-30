@@ -7,6 +7,7 @@ export var Collided = false;
 export var currentLeft = sprites[2];
 export var currentRight = sprites[3];
 export var up = false;
+export var stopped = { stopped: false };
 export function start(vy, x, y) {
     player = PIXI.Sprite.from(sprites[0]);
     player.anchor.set(0.5);
@@ -21,13 +22,13 @@ export function stop() {
     player.visible = false;
 }
 export function tick() {
-    if (up) {
+    if (up && !stopped.stopped) {
         if (vely == 0) {
             terrain.terrainCont.y += 0.2;
             vely = 8;
         }
     }
-    if(vely < -50) {
+    if (vely < -50) {
         vely = -50;
     }
     var collided = false;
@@ -49,7 +50,9 @@ export function tick() {
         }
     }
     if (vely != 0 || !collided) {
-        vely -= 0.14;
+        if (!stopped.stopped) {
+            vely -= 0.14;
+        }
     }
 }
 document.addEventListener("keypress", function (event) {

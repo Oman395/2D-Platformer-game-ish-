@@ -1,17 +1,19 @@
 import * as index from './index.js'
 import * as player from './player.js'
 import * as map from "./map.js";
+import * as menu from "./menu.js"
 export var terrainCont;
 var left = false;
 var right = false;
 var blocks = {};
-var sx;
-var sy;
-var isStart = true;
 export var maxFall;
 export var velx = 0;
-export function start(mapName, tx, ty) {
+export var stopped = { stopped: false };
+export function start(mapName, tx, ty, isStart) {
     maxFall = 100 * map.map[mapName].length + 400;
+    if (ty == 0) {
+        ty = maxFall;
+    }
     terrainCont = new PIXI.Container();
     index.app.stage.addChild(terrainCont);
     for (let i = 0; i < map.map[mapName].length; i++) {
@@ -57,36 +59,23 @@ export function start(mapName, tx, ty) {
                 case ';':
                     addBlock(`terrain${i}`, e * 100 - 100, 100 * i, './images/terrain-insidecorner.png', 180, false);
                     break;
-                case 'S':
+                case 'S': // TODO: start sprite with no colliders
                     if (isStart) {
-                        sx = -1 * e * 100 + 250;
-                        sy = 100 * i + 150;
-                        isStart = false;
-                    } else {
-                        sx = false;
-                        sy = false;
+                        tx = -1 * e * 100 + 250;
+                        ty = 100 * i + 150;
                     }
             }
         }
     }
     terrainCont.y = ty;
     terrainCont.x = tx;
-    if (ty == 0) {
-        terrainCont.y = maxFall;
-    }
-    if (sx, sy) {
-        terrainCont.y = sy;
-        terrainCont.x = sx;
-        sy = false;
-        sx = false;
-    }
 }
 export function stop() {
     terrainCont.visible = false;
 }
 export function tick() {
     terrainCont.x = Math.round(terrainCont.x);
-    if (left) {
+    if (left && !stopped.stopped) {
         var movement = true;
         for (let i = 0; i < terrainCont.children.length; i++) {
             var playerBounds = player.player.getBounds();
@@ -108,7 +97,7 @@ export function tick() {
             velx = 0;
         }
     }
-    if (right) {
+    if (right && !stopped.stopped) {
         var movement = true;
         for (let i = 0; i < terrainCont.children.length; i++) {
             var playerBounds = player.player.getBounds();
@@ -131,10 +120,14 @@ export function tick() {
         }
     }
     if (terrainCont.y < -1 * maxFall) {
-        terrainCont.y = maxFall + 200;
+        menu.stop();
     }
-    terrainCont.y += player.vely;
-    terrainCont.x += velx;
+    if (!player.stopped.stopped) {
+        terrainCont.y += player.vely;
+    }
+    if (!stopped.stopped) {
+        terrainCont.x += velx;
+    }
     var playerBounds = player.player.getBounds();
     for (let i = 0; i < terrainCont.children.length; i++) {
         var terrainBounds = terrainCont.children[i].getBounds();
