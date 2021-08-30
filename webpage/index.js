@@ -6,6 +6,7 @@ var firstStart = false;
 export var app = new PIXI.Application({ resizeTo: document.getElementById("PIXI"), backgroundColor: 0xafafaf, antialiasing: true, view: document.getElementById("PIXI") });
 document.body.appendChild(app.view);
 app.ticker.maxFPS = 0;
+var prevVelY = 0;
 export function start(map, px, py, vy) {
     app.stage.interactive = true;
     if (firstStart) {
@@ -32,7 +33,9 @@ export function tick() {
         case true: // y not moving
             switch (terrain.velx == 0) {
                 case true: // still
-                    player.player.texture = player.sprites[0];
+                    if (player.vely == prevVelY) {
+                        player.player.texture = player.sprites[0];
+                    }
                     break;
                 case false: // x only
                     switch (terrain.velx > 0) {
@@ -85,5 +88,6 @@ export function tick() {
             }
             break;
     }
+    prevVelY = player.vely;
 }
 menu.startUp();

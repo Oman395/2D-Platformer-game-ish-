@@ -20,7 +20,7 @@ export function startUp() {
         }
         sprites[1].on('pointerdown', () => {
             if (menuOn) {
-                index.start(1, x, y, vely);
+                index.start(0, x, y, vely);
                 for (let i = 0; i < sprites.length; i++) {
                     sprites[i].visible = false;
                 }
@@ -31,12 +31,20 @@ export function startUp() {
 }
 document.addEventListener("keydown", function (event) {
     if (event.key == "Escape") {
-        x = terrain.terrainCont.x;
-        y = terrain.terrainCont.y;
-        velx = terrain.velx;
-        vely = player.vely;
-        index.stop();
-        startUp();
+        if (!menuOn) {
+            x = terrain.terrainCont.x;
+            y = terrain.terrainCont.y;
+            velx = terrain.velx;
+            vely = player.vely;
+            index.stop();
+            startUp();
+        } else {
+            index.start(0, x, y, vely);
+            for (let i = 0; i < sprites.length; i++) {
+                sprites[i].visible = false;
+            }
+            menuOn = false;
+        }
     }
 });
 function addMenuOption(x, y, width, sprite) {

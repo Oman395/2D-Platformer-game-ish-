@@ -7,7 +7,7 @@ var right = false;
 var blocks = {};
 var sx;
 var sy;
-var isStart = true;;
+var isStart = true;
 export var maxFall;
 export var velx = 0;
 export function start(mapName, tx, ty) {

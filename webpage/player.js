@@ -27,6 +27,9 @@ export function tick() {
             vely = 8;
         }
     }
+    if(vely < -50) {
+        vely = -50;
+    }
     var collided = false;
     var playerBounds = player.getBounds();
     for (let i = 0; i < terrain.terrainCont.children.length; i++) {
