@@ -8,23 +8,46 @@ var vely = 0;
 var menuOn = false;
 var sprites = [PIXI.Sprite.from("./images/menu.png"),
 PIXI.Sprite.from("./images/start.png"),
-PIXI.Sprite.from("./images/about.png")]
+PIXI.Sprite.from("./images/about.png"),
+PIXI.Sprite.from("./images/resume.png")]
 var firsty;
 export function startUp(first) {
     firsty = first;
     if (!menuOn) {
-        for (let i = 0; i < sprites.length; i++) {
-            sprites[i].visible = true;
+        if (firsty) {
+            for (let i = 0; i < sprites.length; i++) {
+                if (i != 3) {
+                    sprites[i].visible = true;
+                } else {
+                    sprites[3].visible = false;
+                }
+            }
+        } else {
+            for (let i = 0; i < sprites.length - 2; i++) {
+                if (i != 1) {
+                    sprites[i].visible = true;
+                } else {
+                    sprites[3].visible = true;
+                }
+            }
         }
         menuOn = true;
     }
 }
 export function start() {
     for (let i = 0; i < sprites.length; i++) {
-        sprites[i].buttonMode = true;
-        sprites[i].interactive = true;
-        sprites[i] = addMenuOption(window.innerWidth / 2, 150 * i + 150, 300, sprites[i]);
-        index.app.stage.addChild(sprites[i]);
+        if (i != 3) {
+            sprites[i].buttonMode = true;
+            sprites[i].interactive = true;
+            sprites[i] = addMenuOption(window.innerWidth / 2, 150 * i + 150, 300, sprites[i]);
+            index.app.stage.addChild(sprites[i]);
+        } else {
+            sprites[3].buttonMode = true;
+            sprites[3].interactive = true;
+            sprites[3] = addMenuOption(window.innerWidth / 2, 150 * 1 + 150, 300, sprites[3]);
+            sprites[3].visible = false;
+            index.app.stage.addChild(sprites[3]);
+        }
     }
     sprites[1].on('pointerdown', () => {
         if (menuOn) {
@@ -41,6 +64,37 @@ export function start() {
                 }
                 menuOn = false;
             }
+        }
+    });
+    sprites[3].on('pointerdown', () => {
+        if (menuOn) {
+            if (firsty) {
+                index.start(0, x, y, vely, firsty);
+                for (let i = 0; i < sprites.length; i++) {
+                    sprites[i].visible = false;
+                }
+                menuOn = false;
+            } else {
+                index.softStart();
+                for (let i = 0; i < sprites.length; i++) {
+                    sprites[i].visible = false;
+                }
+                menuOn = false;
+            }
+        }
+    });
+    sprites[0].on('pointerdown', () => {
+        if (!firsty) {
+            index.softStart();
+            x = 0;
+            y = 0;
+            velx = 0;
+            vely = 0;
+            index.stop();
+            sprites[2].visible = true;
+            sprites[3].visible = false;
+            sprites[1].visible = true;
+            startUp(true);
         }
     });
 }
