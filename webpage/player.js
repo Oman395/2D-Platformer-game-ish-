@@ -31,14 +31,15 @@ export function tick() {
     var playerBounds = player.getBounds();
     for (let i = 0; i < terrain.terrainCont.children.length; i++) {
         var terrainBounds = terrain.terrainCont.children[i].getBounds();
-        if (index.collide(playerBounds, terrainBounds)[0] && playerBounds.y < terrainBounds.y) {
+        var colData = index.collide(playerBounds, terrainBounds);
+        if (colData[0] && playerBounds.y < terrainBounds.y && playerBounds.y + playerBounds.height < terrainBounds.y + playerBounds.height - 75) {
             collided = true;
             if (vely < 0) {
                 vely = 0;
             }
             var deltaY = playerBounds.y - terrainBounds.y + terrainBounds.height;
             terrain.terrainCont.y += deltaY - 0.1;
-        } else if (index.collide(playerBounds, terrainBounds)[0] && playerBounds.y > terrainBounds.y) {
+        } else if (colData[0] && playerBounds.y > terrainBounds.y) {
             collided = true;
             vely *= -1;
             terrain.terrainCont.y -= 10;

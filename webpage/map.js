@@ -26,7 +26,7 @@ export var map = [
     [ // Extra space here for when I start working on menus and levels
         '------------------------------------------------()',
         '--------------------------------------()--------{}', // This jump length is about the max you can jump with no x error, might want to move further for going back down.
-        '--S-------------------------()--------{}',
+        '----------------------------()--------{}',
         '--(TTTTTT)--------()--------{}',
         '--L;BBBBB}--------{}',
         '--{}',

@@ -60,7 +60,7 @@ export function start(mapName, tx, ty) {
                 case 'S':
                     if (isStart) {
                         sx = -1 * e * 100 + 250;
-                        sy = 100 * i + 100;
+                        sy = 100 * i + 150;
                         isStart = false;
                     } else {
                         sx = false;
@@ -85,14 +85,16 @@ export function stop() {
     terrainCont.visible = false;
 }
 export function tick() {
+    terrainCont.x = Math.round(terrainCont.x);
     if (left) {
         var movement = true;
         for (let i = 0; i < terrainCont.children.length; i++) {
             var playerBounds = player.player.getBounds();
             var terrainBounds = terrainCont.children[i].getBounds();
             playerBounds.x -= 1;
-            if (index.collide(playerBounds, terrainBounds)[0]) {
-                if (index.collide(playerBounds, terrainBounds)[2]) {
+            var colData = index.collide(playerBounds, terrainBounds);
+            if (colData[0]) {
+                if (colData[2] || playerBounds.y > terrainBounds.y - 75) {
                     velx = 0;
                     if (playerBounds.x >= terrainBounds.x) {
                         movement = false;
@@ -112,8 +114,9 @@ export function tick() {
             var playerBounds = player.player.getBounds();
             var terrainBounds = terrainCont.children[i].getBounds();
             playerBounds.x += 1;
-            if (index.collide(playerBounds, terrainBounds)[0]) {
-                if (index.collide(playerBounds, terrainBounds)[2]) {
+            var colData = index.collide(playerBounds, terrainBounds);
+            if (colData[0]) {
+                if (colData[2] || playerBounds.y > terrainBounds.y - 75) {
                     velx = 0;
                     if (playerBounds.x + playerBounds.width <= terrainBounds.x + terrainBounds.width) {
                         movement = false;
@@ -135,8 +138,9 @@ export function tick() {
     var playerBounds = player.player.getBounds();
     for (let i = 0; i < terrainCont.children.length; i++) {
         var terrainBounds = terrainCont.children[i].getBounds();
-        if (index.collide(playerBounds, terrainBounds)[0]) {
-            if (index.collide(playerBounds, terrainBounds)[2] && playerBounds.y <= terrainBounds.y + terrainBounds.height / 2) {
+        var colData = index.collide(playerBounds, terrainBounds);
+        if (colData[0]) {
+            if (colData[2] && playerBounds.y <= terrainBounds.y + terrainBounds.height / 2) {
                 velx = 0;
                 if (playerBounds.x + playerBounds.width / 2 < terrainBounds.x + terrainBounds.width / 2) {
                     playerBounds.x += 0.001;
