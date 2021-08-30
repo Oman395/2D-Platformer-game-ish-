@@ -5,6 +5,9 @@ export var terrainCont;
 var left = false;
 var right = false;
 var blocks = {};
+var sx;
+var sy;
+var isStart = true;;
 export var maxFall;
 export var velx = 0;
 export function start(mapName, tx, ty) {
@@ -54,6 +57,15 @@ export function start(mapName, tx, ty) {
                 case ';':
                     addBlock(`terrain${i}`, e * 100 - 100, 100 * i, './images/terrain-insidecorner.png', 180, false);
                     break;
+                case 'S':
+                    if (isStart) {
+                        sx = -1 * e * 100 + 250;
+                        sy = 100 * i + 100;
+                        isStart = false;
+                    } else {
+                        sx = false;
+                        sy = false;
+                    }
             }
         }
     }
@@ -61,6 +73,12 @@ export function start(mapName, tx, ty) {
     terrainCont.x = tx;
     if (ty == 0) {
         terrainCont.y = maxFall;
+    }
+    if (sx, sy) {
+        terrainCont.y = sy;
+        terrainCont.x = sx;
+        sy = false;
+        sx = false;
     }
 }
 export function stop() {

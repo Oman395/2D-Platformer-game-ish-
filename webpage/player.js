@@ -7,7 +7,7 @@ export var Collided = false;
 export var currentLeft = sprites[2];
 export var currentRight = sprites[3];
 export var up = false;
-export function start(vy) {
+export function start(vy, x, y) {
     player = PIXI.Sprite.from(sprites[0]);
     player.anchor.set(0.5);
     player.y = 600;

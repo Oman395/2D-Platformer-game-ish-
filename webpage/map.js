@@ -9,6 +9,7 @@ export var map = [
         'G': Ground center, not walkable surface
         ':', ';': Interior corner top, left and right
         '[', ']': Interior corner bottom, left and right
+        'S': Start position
         One character is exactly the same size as the player model
         Add as many lines as you want, the blocks move with the player
         Dashes are spaces
@@ -25,7 +26,7 @@ export var map = [
     [ // Extra space here for when I start working on menus and levels
         '------------------------------------------------()',
         '--------------------------------------()--------{}', // This jump length is about the max you can jump with no x error, might want to move further for going back down.
-        '----------------------------()--------{}',
+        '--S-------------------------()--------{}',
         '--(TTTTTT)--------()--------{}',
         '--L;BBBBB}--------{}',
         '--{}',
