@@ -1,5 +1,6 @@
 import * as terrain from "./terrain.js";
 import * as index from "./index.js";
+import * as menu from "./menu.js";
 export var sprites = [PIXI.Texture.from('./images/player-melvin.png'), PIXI.Texture.from('./images/player-melvin-down.png'), PIXI.Texture.from('./images/player-melvin-right-f1.png'), PIXI.Texture.from('./images/player-melvin-left-f1.png'), PIXI.Texture.from('./images/player-melvin-downr.png'), PIXI.Texture.from('./images/player-melvin-downl.png'), PIXI.Texture.from('./images/player-melvin-jump.png'), PIXI.Texture.from('./images/player-melvin-downr.png'), PIXI.Texture.from('./images/player-melvin-downl.png')];
 export var player;
 export var vely = -1;
@@ -32,10 +33,13 @@ export function tick() {
         vely = -50;
     }
     var collided = false;
-    var playerBounds = player.getBounds();
     for (let i = 0; i < terrain.terrainCont.children.length; i++) {
+        var playerBounds = player.getBounds();
         var terrainBounds = terrain.terrainCont.children[i].getBounds();
         var colData = index.collide(playerBounds, terrainBounds);
+        if (colData[0] && terrain.terrainCont.children[i].boundary) {
+            terrain.terrainCont.y = -1 * terrain.maxFall;
+        }
         if (colData[0] && playerBounds.y < terrainBounds.y && playerBounds.y + playerBounds.height < terrainBounds.y + playerBounds.height - 75) {
             collided = true;
             if (vely < 0) {
@@ -45,7 +49,7 @@ export function tick() {
             terrain.terrainCont.y += deltaY - 0.1;
         } else if (colData[0] && playerBounds.y > terrainBounds.y) {
             collided = true;
-            vely *= -1;
+            vely *= -0.7;
             terrain.terrainCont.y -= 10;
         }
     }
@@ -53,6 +57,14 @@ export function tick() {
         if (!stopped.stopped) {
             vely -= 0.14;
         }
+    }
+    if (terrain.terrainCont.y < -1 * terrain.maxFall) {
+        (async () => {
+            for (let i = 0; player.y < window.innerHeight; player.y += 4) {
+                await new Promise(r => setTimeout(r, 1000 / 10));
+            }
+            menu.stop();
+        })();
     }
 }
 document.addEventListener("keypress", function (event) {

@@ -24,7 +24,7 @@ export function start(mapName, tx, ty, isStart) {
                     addBlock(`terrain${i}`, e * 100 - 100, 100 * i, './images/terrain-nograss.png', 0, false);
                     break;
                 case 'T':
-                    addBlock(`terrain${i}`, e * 100 - 100, 100 * i, './images/terrain.png', 0, true);
+                    addBlock(`terrain${i}`, e * 100 - 100, 100 * i, './images/terrain.png', 0, false);
                     break;
                 case 'L':
                     addBlock(`terrain${i}`, e * 100 - 100, 100 * i, './images/terrain.png', 270, false);
@@ -36,10 +36,10 @@ export function start(mapName, tx, ty, isStart) {
                     addBlock(`terrain${i}`, e * 100 - 100, 100 * i, './images/terrain.png', 180, false);
                     break;
                 case '(':
-                    addBlock(`terrain${i}`, e * 100 - 100, 100 * i, './images/terrain-corner.png', 0, true);
+                    addBlock(`terrain${i}`, e * 100 - 100, 100 * i, './images/terrain-corner.png', 0, false);
                     break;
                 case ')':
-                    addBlock(`terrain${i}`, e * 100 - 100, 100 * i, './images/terrain-corner.png', 90, true);
+                    addBlock(`terrain${i}`, e * 100 - 100, 100 * i, './images/terrain-corner.png', 90, false);
                     break;
                 case '{':
                     addBlock(`terrain${i}`, e * 100 - 100, 100 * i, './images/terrain-corner.png', 270, false);
@@ -59,10 +59,21 @@ export function start(mapName, tx, ty, isStart) {
                 case ';':
                     addBlock(`terrain${i}`, e * 100 - 100, 100 * i, './images/terrain-insidecorner.png', 180, false);
                     break;
+                case 'X':
+                    addBlock(`terrain${i}`, e * 100 - 100, 100 * i, './image.png', 180, true);
+                    break;
+                case '$':
+                    addBlock(`terrain${i}`, e * 100 - 100, 100 * i, './images/terrain-insidecorner-double.png', 0, false);
+                    break;
+                case '%':
+                    addBlock(`terrain${i}`, e * 100 - 100, 100 * i, './images/terrain-insidecorner-double.png', 90, false);
+                    break;
                 case 'S': // TODO: start sprite with no colliders
                     if (isStart) {
                         tx = -1 * e * 100 + 250;
-                        ty = 100 * i + 150;
+                        ty = 550 - 100 * i;
+                        console.log(maxFall);
+                        console.log(i);
                     }
             }
         }
@@ -119,9 +130,6 @@ export function tick() {
             velx = 0;
         }
     }
-    if (terrainCont.y < -1 * maxFall) {
-        menu.stop();
-    }
     if (!player.stopped.stopped) {
         terrainCont.y += player.vely;
     }
@@ -148,13 +156,13 @@ export function tick() {
         }
     }
 }
-function addBlock(name, x, y, image, angle, top) {
+function addBlock(name, x, y, image, angle, boundary) {
     blocks[name] = new PIXI.Sprite.from(image);
     blocks[name].y = y;
     blocks[name].x = x;
     blocks[name].width = 100;
     blocks[name].height = 100;
-    blocks[name].top = top;
+    blocks[name].boundary = boundary;
     if (angle) {
         switch (angle) {
             case 90:

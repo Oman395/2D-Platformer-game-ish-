@@ -10,14 +10,20 @@ export function start(map, px, py, vy, fs) {
     app.stage.interactive = true;
     if (fs) {
         (player.start(vy), terrain.start(map, px, py, true), ticker.start(), () => {
+            player.stopped.stopped = false;
+            terrain.stopped.stopped = false;
         })();
     } else {
         (player.start(vy), terrain.start(map, px, py, false), () => {
+            player.stopped.stopped = false;
+            terrain.stopped.stopped = false;
         })();
     }
 }
 export function stop() {
     (player.stop(), terrain.stop(), () => {
+        player.stopped.stopped = true;
+        terrain.stopped.stopped = true;
     })();
 }
 export function softStop() {
@@ -98,5 +104,6 @@ export function tick() {
         prevVelY = player.vely;
     }
 }
+app.ticker.maxFPS = 0;
 menu.start(true);
 menu.startUp(true);
