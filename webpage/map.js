@@ -17,6 +17,7 @@ export var map = [
         Dashes are spaces
         Farthest jump is ~9 spaces but farthest not horrible is 8
         Currently working on a start pos but it's uh... not fun
+        Each map contained within brackets is a map, 1 through 9
         Have fun, and mess around!*/
         'S',
         '(TTT)',
@@ -29,7 +30,7 @@ export var map = [
         '()',
         '{}',
         '',
-        '---()---XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX', // Three blocks left is minimum to keep blocks out of sight, but a lot more to the right
+        '---()---XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX', // Three blocks left is minimum to keep blocks out of sight, but a lot more to the right
         '---{}',
         '',
         '()',
@@ -50,12 +51,68 @@ export var map = [
         '',
         '',
     ],
-    [ // Extra space here for when I start working on menus and levels
+    [ // This is a placeholder for when I start making actual maps lol
         '------------------------------------------------()',
-        '--------------------------------------()--------{}', // This jump length is about the max you can jump with no x error, might want to move further for going back down.
-        '----------------------------()--------{}',
+        '--------------------------------------()--------{}',
+        '--S-------------------------()--------{}',
         '--(TTTTTT)--------()--------{}',
         '--L;BBBBB}--------{}',
         '--{}',
-    ]
+    ],
+    [ // This is a placeholder for when I start making actual maps lol
+        '------------------------------------------------()',
+        '--------------------------------------()--------{}',
+        '--S-------------------------()--------{}',
+        '--(TTTTTT)--------()--------{}',
+        '--L;BBBBB}--------{}',
+        '--{}',
+    ],
+    [ // This is a placeholder for when I start making actual maps lol
+        '------------------------------------------------()',
+        '--------------------------------------()--------{}',
+        '--S-------------------------()--------{}',
+        '--(TTTTTT)--------()--------{}',
+        '--L;BBBBB}--------{}',
+        '--{}',
+    ],
+    [ // This is a placeholder for when I start making actual maps lol
+        '------------------------------------------------()',
+        '--------------------------------------()--------{}',
+        '--S-------------------------()--------{}',
+        '--(TTTTTT)--------()--------{}',
+        '--L;BBBBB}--------{}',
+        '--{}',
+    ],
+    [ // This is a placeholder for when I start making actual maps lol
+        '------------------------------------------------()',
+        '--------------------------------------()--------{}',
+        '--S-------------------------()--------{}',
+        '--(TTTTTT)--------()--------{}',
+        '--L;BBBBB}--------{}',
+        '--{}',
+    ],
+    [ // This is a placeholder for when I start making actual maps lol
+        '------------------------------------------------()',
+        '--------------------------------------()--------{}',
+        '--S-------------------------()--------{}',
+        '--(TTTTTT)--------()--------{}',
+        '--L;BBBBB}--------{}',
+        '--{}',
+    ],
+    [ // This is a placeholder for when I start making actual maps lol
+        '------------------------------------------------()',
+        '--------------------------------------()--------{}',
+        '--S-------------------------()--------{}',
+        '--(TTTTTT)--------()--------{}',
+        '--L;BBBBB}--------{}',
+        '--{}',
+    ],
+    [ // This is a placeholder for when I start making actual maps lol
+        '------------------------------------------------()',
+        '--------------------------------------()--------{}',
+        '--S-------------------------()--------{}',
+        '--(TTTTTT)--------()--------{}',
+        '--L;BBBBB}--------{}',
+        '--{}',
+    ],
 ]

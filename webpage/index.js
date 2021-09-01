@@ -6,7 +6,7 @@ export var app = new PIXI.Application({ resizeTo: document.getElementById("PIXI"
 document.body.appendChild(app.view);
 app.ticker.maxFPS = 0;
 var prevVelY = 0;
-export function start(map, px, py, vy, fs) {
+export function start(map, px, py, vy, fs) { // Gets all the sprites ready for action
     app.stage.interactive = true;
     if (fs) {
         (player.start(vy), terrain.start(map, px, py, true), ticker.start(), () => {
@@ -26,23 +26,24 @@ export function stop() {
         terrain.stopped.stopped = true;
     })();
 }
-export function softStop() {
+export function softStop() { // Pau-
     player.stopped.stopped = true;
     terrain.stopped.stopped = true;
 }
-export function softStart() {
+export function softStart() { // Unpause
     player.stopped.stopped = false;
     terrain.stopped.stopped = false;
 }
+// I'm hilarious
 export var currentSprites = { "R": player.sprites[3], "L": player.sprites[2] };
-export function collide(ab, bb) {
+export function collide(ab, bb) { // Collision logic, middle one I dont know what it does but im too lazy to update the references to the last return value so here it stays
     return [ab.x + ab.width > bb.x && ab.x < bb.x + bb.width && ab.y + ab.height > bb.y && ab.y < bb.y + bb.height,
     ab.x + ab.width > bb.x + bb.width && ab.x + ab.width > bb.x && ab.x < bb.x + bb.width && ab.y + ab.height > bb.y && ab.y < bb.y + bb.height,
     ab.y + ab.height > bb.y + bb.height && ab.x + ab.width > bb.x && ab.x < bb.x + bb.width && ab.y + ab.height > bb.y && ab.y < bb.y + bb.height];
 }
 export function tick() {
-    if (!terrain.stopped.stopped) {
-        switch (player.vely == 0) {
+    if (!terrain.stopped.stopped) { // Makes sure not paused
+        switch (player.vely == 0) { // All of this figures out exactly what the player movement is, and sets sprite accordingly. Also sets left&right sprite to its current animation fram instead of just a static image :D
             case true: // y not moving
                 switch (terrain.velx == 0) {
                     case true: // still

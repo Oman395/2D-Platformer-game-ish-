@@ -4,7 +4,7 @@ var params = {
     host: "0.0.0.0",
     file: "./webpage/index.html",
     wait: 1000,
-    mount: ['./webpage'],
+    mount: ['./webpage', './node_modules'],
     root: './',
     logLevel: 0,
     middleware: [function(req, res, next) { next(); }],

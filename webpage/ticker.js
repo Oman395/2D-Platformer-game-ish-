@@ -2,7 +2,7 @@ import * as index from "./index.js"
 import * as player from "./player.js"
 import * as terrain from "./terrain.js"
 export var ticking = { "ticking": true, "started": false };
-export function start() {
+export function start() { // dis boi handles ticking for everything! 120fps!
     (async () => {
         if (!ticking.started) {
             ticking.started = true;
