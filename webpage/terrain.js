@@ -136,18 +136,23 @@ export function tick() {
     for (let i = 0; i < terrainCont.children.length; i++) {
         var playerBounds = player.player.getBounds(); // Having playerbounds declared outside the for loop fucked everything cause I mess with the actual variable on line 145 & 149, so here it is inside :D
         var terrainBounds = terrainCont.children[i].getBounds();
-        var colData = index.collide(playerBounds, terrainBounds);
-        if (colData[0]) { // If colliding
-            if (colData[2] && playerBounds.y <= terrainBounds.y + terrainBounds.height / 2) { // If player is to the side of a block, and isnt abt to jump up
-                velx = 0;
-                if (playerBounds.x + playerBounds.width / 2 < terrainBounds.x + terrainBounds.width / 2) { // Figures out what side of block it's on
-                    playerBounds.x += 0.001;
-                    var deltaX = (playerBounds.x + playerBounds.width) - (terrainBounds.x);
-                    terrainCont.x += deltaX;
-                } else {
-                    playerBounds.x -= 0.001;
-                    var deltaX = (playerBounds.x) - (terrainBounds.x + terrainBounds.width);
-                    terrainCont.x += deltaX;
+        if (Math.abs(Math.abs(terrainBounds.x) - Math.abs(playerBounds.x)) > window.innerWidth || Math.abs(Math.abs(terrainBounds.y) - Math.abs(playerBounds.y)) > window.innerHeight) {
+            terrainCont.children[i].renderable = false;
+        } else {
+            terrainCont.children[i].renderable = true;
+            var colData = index.collide(playerBounds, terrainBounds);
+            if (colData[0]) { // If colliding
+                if (colData[2] && playerBounds.y <= terrainBounds.y + terrainBounds.height / 2) { // If player is to the side of a block, and isnt abt to jump up
+                    velx = 0;
+                    if (playerBounds.x + playerBounds.width / 2 < terrainBounds.x + terrainBounds.width / 2) { // Figures out what side of block it's on
+                        playerBounds.x += 0.001;
+                        var deltaX = (playerBounds.x + playerBounds.width) - (terrainBounds.x);
+                        terrainCont.x += deltaX;
+                    } else {
+                        playerBounds.x -= 0.001;
+                        var deltaX = (playerBounds.x) - (terrainBounds.x + terrainBounds.width);
+                        terrainCont.x += deltaX;
+                    }
                 }
             }
         }
