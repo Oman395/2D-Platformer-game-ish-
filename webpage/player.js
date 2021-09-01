@@ -13,7 +13,7 @@ export function start(vy) {
     player = PIXI.Sprite.from(sprites[0]);
     player.anchor.set(0.5);
     player.y = window.innerHeight / 2;
-    player.x = 275;
+    player.x = window.innerWidth / 2;
     player.width = 100;
     player.height = 100;
     vely = vy;

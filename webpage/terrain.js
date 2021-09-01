@@ -69,7 +69,7 @@ export function start(mapName, tx, ty, isStart) {
                     break;
                 case 'S': // TODO: start sprite with no colliders
                     if (isStart) {
-                        tx = -1 * e * 100 + 325; // The extra add bit compensates for the player's x position
+                        tx = window.innerWidth / 2 + 50 - 1 * e * 100;
                         ty = window.innerHeight / 2 - 50 - 100 * i;
                     }
             }
@@ -177,7 +177,7 @@ function addBlock(name, x, y, image, angle, boundary, display) { // See function
     blocks[name].width = 100;
     blocks[name].height = 100;
     blocks[name].boundary = boundary;
-    if(display) {
+    if (display) {
         blocks[name].visible = false;
     }
     if (angle) { // position correction, changing the anchor fucks everything so I just correct for x and y pos
