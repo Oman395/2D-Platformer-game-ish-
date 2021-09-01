@@ -1,5 +1,4 @@
 import * as index from "./index.js"
-console.log(data);
 var x = 0;
 var y = 0;
 var velx = 0;
