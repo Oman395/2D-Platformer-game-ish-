@@ -70,8 +70,7 @@ export function start(mapName, tx, ty, isStart) {
                 case 'S': // TODO: start sprite with no colliders
                     if (isStart) {
                         tx = -1 * e * 100 + 325; // The extra add bit compensates for the player's x position
-                        ty = 425/*I would make it 420, but that causes a visual bug*/ - 100 * i; // Imma be real I have no clue why I need to set ty to 550 initially, but it is needed to work.
-                        // I think it has to do with player y pos but I have no clue...
+                        ty = window.innerHeight / 2 - 50 - 100 * i;
                     }
             }
         }
