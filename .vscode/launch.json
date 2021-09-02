@@ -5,10 +5,13 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "type": "pwa-chrome",
+            "name": "Run server",
+            "program": "${workspaceFolder}/server.js",
             "request": "launch",
-            "name": "Open index.html",
-            "file": "d:\\oranr\\Documents\\gaym\\index.html"
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "type": "pwa-node"
         }
     ]
 }

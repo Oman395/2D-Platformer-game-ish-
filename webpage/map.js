@@ -19,7 +19,7 @@ export var map = [
         Currently working on a start pos but it's uh... not fun
         Each map contained within brackets is a map, 1 through 9
         Have fun, and mess around!*/
-        'S',
+        'SEEEE',
         '(TTT)',
         '{BBB}',
         '',
@@ -40,8 +40,8 @@ export var map = [
         '-----LR----------------------------($}',
         '-----L]T)-------------------------($}', // FUN FACT: Each block you go up, adds another block of jump range!
         '-----{BB}------------------------($}',
-        '--------------------------------($}',
-        '-------------------------------([}',
+        '----------------------R-----L---($}',
+        '----------------------R-----L--([}',
         '--------------()------(TTTTTTTT$}',
         '--------------{}------{BBBBBBBB}',
     ],

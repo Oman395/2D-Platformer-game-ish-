@@ -1,14 +1,17 @@
 import * as index from './index.js'
 import * as player from './player.js'
 import * as map from "./map.js";
+import * as enemy from "./enemy.js";
 export var terrainCont;
 var left = false;
 var right = false;
 var blocks = {};
 export var maxFall;
 export var velx = 0;
+export var meatball;
 export var stopped = { stopped: false };
 export function start(mapName, tx, ty, isStart) {
+    meatball = new enemy.enemyType();
     maxFall = 100 * map.map[mapName].length + 400; // Sets the borders of the world, could probably use PIXI.app.getBounds() but eh, this works better IMO.
     if (ty == 0) { // If ty is set to default value, ty is set to max height then you fall into place. I have 0 as the ty default, just cause It's impossible to pause on y of 0... right?
         ty = maxFall;
@@ -69,12 +72,18 @@ export function start(mapName, tx, ty, isStart) {
                     break;
                 case 'S': // TODO: start sprite with no colliders
                     if (isStart) {
-                        tx = window.innerWidth / 2 + 50 - 1 * e * 100;
-                        ty = window.innerHeight / 2 - 50 - 100 * i;
+                        tx = Math.round(((window.innerWidth / 2 + 50) - (1 * e * 100)) / 10) * 10;
+                        ty = (window.innerHeight / 2 - 50) - (100 * i);
                     }
+                    break;
+                case 'E':
+                    meatball.newEnemy(e * 100 - 100, 100 * i, 100, 100);
+                    break;
             }
         }
     }
+    meatball.enemyCont.collide = false;
+    // terrainCont.addChild(meatball.enemyCont);
     terrainCont.y = ty;
     terrainCont.x = tx;
 }
@@ -86,36 +95,39 @@ export function tick() {
         var playerBounds = player.player.getBounds(); // Having playerbounds declared outside the for loop fucked everything cause I mess with the actual variable on line 145 & 149, so here it is inside :D
         var terrainBounds = terrainCont.children[i].getBounds();
         if (Math.abs(Math.abs(terrainBounds.x) - Math.abs(playerBounds.x)) > window.innerWidth || Math.abs(Math.abs(terrainBounds.y) - Math.abs(playerBounds.y)) > window.innerHeight) {
-            terrainCont.children[i].renderable = false;
-            terrainCont.children[i].collide = false;
+            if (terrainCont.children[i].children.length <= 1) {
+                terrainCont.children[i].renderable = false;
+                terrainCont.children[i].collide = false;
+            }
         } else {
-            terrainCont.children[i].renderable = true;
-            terrainCont.children[i].collide = true;
+            if (terrainCont.children[i].children.length <= 1) {
+                terrainCont.children[i].renderable = true;
+                terrainCont.children[i].collide = true;
+            }
         }
     }
-    terrainCont.x = Math.round(terrainCont.x); // Rounds the x pos, I find it helps the collision detection not be insane (block width is 100, move speed is 10/tick, if x pos desyncs from base 10 bad things happen)
-    if (left && !stopped.stopped) {
+    if (left && !stopped.stopped) { // Same as left but inverse kekw
         var movement = true;
-        for (let i = 0; i < terrainCont.children.length; i++) { // For each terrain block
+        for (let i = 0; i < terrainCont.children.length; i++) { // Counterintuitively, having multiple for loops is _far_ better, as it means I don't need to worry abt movement being triggered for each block
             if (terrainCont.children[i].collide) {
                 var playerBounds = player.player.getBounds();
                 var terrainBounds = terrainCont.children[i].getBounds();
                 playerBounds.x -= 1;
-                var colData = index.collide(playerBounds, terrainBounds); // Gets collision data
+                var colData = index.collide(playerBounds, terrainBounds);
                 if (colData[0]) {
-                    if (colData[2] || playerBounds.y > terrainBounds.y - 75) { // Checks for wall, makes sure player is above the terrain-- might cause some issues later but eh
+                    if (colData[2] || playerBounds.y > terrainBounds.y - 75) {
                         velx = 0;
-                        if (playerBounds.x >= terrainBounds.x) { // makes sure that it can or can't move from the wall
+                        if (playerBounds.x <= terrainBounds.x + terrainBounds.width) {
                             movement = false;
                         }
                     }
                 }
             }
-            if (movement && !right) { // If it can move, and the right key isnt pressed, start goin!
-                velx = 10;
-            } else if (right) {
-                velx = 0;
-            }
+        }
+        if (movement && !right) {
+            velx = 10;
+        } else if (right) {
+            velx = 0;
         }
     }
     if (right && !stopped.stopped) { // Same as left but inverse kekw
@@ -134,14 +146,15 @@ export function tick() {
                         }
                     }
                 }
-                if (movement && !left) {
-                    velx = -10;
-                } else if (left) {
-                    velx = 0;
-                }
             }
         }
+        if (movement && !left) {
+            velx = -10;
+        } else if (left) {
+            velx = 0;
+        }
     }
+    terrainCont.x = Math.round(terrainCont.x); // Rounds the x pos, I find it helps the collision detection not be insane (block width is 100, move speed is 10/tick, if x pos desyncs from base 10 bad things happen)
     if (!player.stopped.stopped) { // makes sure that game isnt paused before adjusting pos by vely, vely is handled by player to hopefully be more effecient code
         terrainCont.y += player.vely;
     }
@@ -149,21 +162,23 @@ export function tick() {
         terrainCont.x += velx;
     }
     for (let i = 0; i < terrainCont.children.length; i++) {
-        var playerBounds = player.player.getBounds(); // Having playerbounds declared outside the for loop fucked everything cause I mess with the actual variable on line 145 & 149, so here it is inside :D
-        var terrainBounds = terrainCont.children[i].getBounds();
-        if (terrainCont.children[i].collide) {
-            var colData = index.collide(playerBounds, terrainBounds);
-            if (colData[0]) { // If colliding
-                if (colData[2] && playerBounds.y <= terrainBounds.y + terrainBounds.height / 2) { // If player is to the side of a block, and isnt abt to jump up
-                    velx = 0;
-                    if (playerBounds.x + playerBounds.width / 2 < terrainBounds.x + terrainBounds.width / 2) { // Figures out what side of block it's on
-                        playerBounds.x += 0.001;
-                        var deltaX = (playerBounds.x + playerBounds.width) - (terrainBounds.x);
-                        terrainCont.x += deltaX;
-                    } else {
-                        playerBounds.x -= 0.001;
-                        var deltaX = (playerBounds.x) - (terrainBounds.x + terrainBounds.width);
-                        terrainCont.x += deltaX;
+        if (terrainCont.children.collide) {
+            var playerBounds = player.player.getBounds(); // Having playerbounds declared outside the for loop fucked everything cause I mess with the actual variable on line 145 & 149, so here it is inside :D
+            var terrainBounds = terrainCont.children[i].getBounds();
+            if (terrainCont.children[i].collide && terrainCont.children[i].children.lenth <= 1) {
+                var colData = index.collide(playerBounds, terrainBounds);
+                if (colData[0]) { // If colliding
+                    if (colData[2] && playerBounds.y <= terrainBounds.y + terrainBounds.height / 2) { // If player is to the side of a block, and isnt abt to jump up
+                        velx = 0;
+                        if (playerBounds.x + playerBounds.width / 2 < terrainBounds.x + terrainBounds.width / 2) { // Figures out what side of block it's on
+                            playerBounds.x += 0.001;
+                            var deltaX = (playerBounds.x + playerBounds.width) - (terrainBounds.x);
+                            terrainCont.x += deltaX;
+                        } else {
+                            playerBounds.x -= 0.001;
+                            var deltaX = (playerBounds.x) - (terrainBounds.x + terrainBounds.width);
+                            terrainCont.x += deltaX;
+                        }
                     }
                 }
             }

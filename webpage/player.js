@@ -13,7 +13,7 @@ export function start(vy) {
     player = PIXI.Sprite.from(sprites[0]);
     player.anchor.set(0.5);
     player.y = window.innerHeight / 2;
-    player.x = window.innerWidth / 2;
+    player.x = Math.round(window.innerWidth / 20) * 10;
     player.width = 100;
     player.height = 100;
     vely = vy;
@@ -33,24 +33,26 @@ export function tick() {
         vely = -50;
     }
     var collided = false;
-    for (let i = 0; i < terrain.terrainCont.children.length; i++) { // For each block in terrain
-        var playerBounds = player.getBounds();
-        var terrainBounds = terrain.terrainCont.children[i].getBounds();
-        var colData = index.collide(playerBounds, terrainBounds);
-        if (colData[0] && terrain.terrainCont.children[i].boundary) { // If colliding with a boundary block, fall out of world
-            terrain.terrainCont.y = -1 * terrain.maxFall;
-        }
-        if (colData[0] && playerBounds.y < terrainBounds.y && playerBounds.y + playerBounds.height < terrainBounds.y + playerBounds.height - 75) { // Black magic
-            collided = true;
-            if (vely < 0) {
-                vely = 0;
+    for (let i = 0; i < terrain.terrainCont.children.length; i++) {
+        if (terrain.terrainCont.children[i].collide) {            // For each block in terrain\
+            var playerBounds = player.getBounds();
+            var terrainBounds = terrain.terrainCont.children[i].getBounds();
+            var colData = index.collide(playerBounds, terrainBounds);
+            if (colData[0] && terrain.terrainCont.children[i].boundary) { // If colliding with a boundary block, fall out of world
+                terrain.terrainCont.y = -1 * terrain.maxFall;
             }
-            var deltaY = playerBounds.y - terrainBounds.y + terrainBounds.height;
-            terrain.terrainCont.y += deltaY - 0.1;
-        } else if (colData[0] && playerBounds.y > terrainBounds.y) { // More black magic
-            collided = true;
-            vely *= -0.7;
-            terrain.terrainCont.y -= 10;
+            if (colData[0] && playerBounds.y < terrainBounds.y && playerBounds.y + playerBounds.height < terrainBounds.y + playerBounds.height - 75) { // Black magic
+                collided = true;
+                if (vely < 0) {
+                    vely = 0;
+                }
+                var deltaY = playerBounds.y - terrainBounds.y + terrainBounds.height;
+                terrain.terrainCont.y += deltaY - 0.1;
+            } else if (colData[0] && playerBounds.y > terrainBounds.y) { // More black magic
+                collided = true;
+                vely *= -0.7;
+                terrain.terrainCont.y -= 10;
+            }
         }
     }
     if (vely != 0 || !collided) {
