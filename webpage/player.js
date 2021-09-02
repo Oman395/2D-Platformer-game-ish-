@@ -33,13 +33,24 @@ export function tick() {
         vely = -50;
     }
     var collided = false;
-    for (let i = 0; i < terrain.terrainCont.children.length; i++) {
-        if (terrain.terrainCont.children[i].collide) {            // For each block in terrain\
+    for (let i = 0; i < terrain.terrainCont.children.length; i++) { // For each block in terrain
+        if (terrain.terrainCont.children[i].collide) {
             var playerBounds = player.getBounds();
             var terrainBounds = terrain.terrainCont.children[i].getBounds();
             var colData = index.collide(playerBounds, terrainBounds);
             if (colData[0] && terrain.terrainCont.children[i].boundary) { // If colliding with a boundary block, fall out of world
                 terrain.terrainCont.y = -1 * terrain.maxFall;
+            }
+            if (colData[0] && terrain.terrainCont.children[i].length != 0) {
+                for (let e = 0; e < terrain.terrainCont.children[i].children.length; e++) {
+                    var enemyBounds = terrain.terrainCont.children[i].children[e].getBounds();
+                    if (index.collide(playerBounds, enemyBounds)[0] && playerBounds.y + playerBounds.height + 50 > enemyBounds.y + enemyBounds.height) {
+                        menu.stop();
+                    } else if (index.collide(playerBounds, enemyBounds)[0] && playerBounds.y + playerBounds.height + 50 < enemyBounds.y + enemyBounds.height) {
+                        terrain.terrainCont.children[i].children.splice(e, 1);
+                        vely *= -1.5;
+                    }
+                }
             }
             if (colData[0] && playerBounds.y < terrainBounds.y && playerBounds.y + playerBounds.height < terrainBounds.y + playerBounds.height - 75) { // Black magic
                 collided = true;

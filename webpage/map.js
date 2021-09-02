@@ -12,6 +12,7 @@ export var map = [
         '$', '%': Interior corner double, left and right
         'S': Start position
         'X': Boundary block, player teleps to the bottom of the world and dies instantly, make sure no blocks in view!
+        'E' Enemy, jump on the head to kill- but watch out for the sides!
         One character is exactly the same size as the player model
         Add as many lines as you want, the blocks move with the player
         Dashes are spaces
@@ -19,7 +20,7 @@ export var map = [
         Currently working on a start pos but it's uh... not fun
         Each map contained within brackets is a map, 1 through 9
         Have fun, and mess around!*/
-        'SEEEE',
+        'S',
         '(TTT)',
         '{BBB}',
         '',
@@ -33,15 +34,15 @@ export var map = [
         '-----()',
         '-----{}',
         '',
-        '--()',
-        '--{}----------------------------------()', // TODO: Add end system
-        '-------------------------------------($}',
-        '-----()-----------------------------($}',
+        '--()-----------------------------------------()-------()',
+        '--{}----------------------------------()-----LR---E---LR',
+        '-------------------------------------($}-----L]TTTTTTT[R',
+        '-----()-----------------------------($}------{BBBBBBBBB}',
         '-----LR----------------------------($}',
         '-----L]T)-------------------------($}', // FUN FACT: Each block you go up, adds another block of jump range!
         '-----{BB}------------------------($}',
-        '----------------------R-----L---($}',
-        '----------------------R-----L--([}',
+        '--------------------------------($}',
+        '-------------------------------([}',
         '--------------()------(TTTTTTTT$}',
         '--------------{}------{BBBBBBBB}',
     ],

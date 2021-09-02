@@ -83,7 +83,7 @@ export function start(mapName, tx, ty, isStart) {
         }
     }
     meatball.enemyCont.collide = false;
-    // terrainCont.addChild(meatball.enemyCont);
+    terrainCont.addChild(meatball.enemyCont);
     terrainCont.y = ty;
     terrainCont.x = tx;
 }
@@ -95,20 +95,45 @@ export function tick() {
         var playerBounds = player.player.getBounds(); // Having playerbounds declared outside the for loop fucked everything cause I mess with the actual variable on line 145 & 149, so here it is inside :D
         var terrainBounds = terrainCont.children[i].getBounds();
         if (Math.abs(Math.abs(terrainBounds.x) - Math.abs(playerBounds.x)) > window.innerWidth || Math.abs(Math.abs(terrainBounds.y) - Math.abs(playerBounds.y)) > window.innerHeight) {
-            if (terrainCont.children[i].children.length <= 1) {
-                terrainCont.children[i].renderable = false;
-                terrainCont.children[i].collide = false;
-            }
+            terrainCont.children[i].renderable = false;
+            terrainCont.children[i].collide = false;
         } else {
-            if (terrainCont.children[i].children.length <= 1) {
-                terrainCont.children[i].renderable = true;
-                terrainCont.children[i].collide = true;
+            terrainCont.children[i].renderable = true;
+            terrainCont.children[i].collide = true;
+        }
+        if (terrainCont.children[i].children.length >= 1 && terrainCont.children[i].collide) {
+            for (let e = 0; e < terrainCont.children[i].children.length; e++) {
+                var movement = true;
+                for (let f = 0; f < terrainCont.children.length; f++) {
+                    if (terrainCont.children[f].children.length == 0) {
+                        var enemyBounds = terrainCont.children[i].children[e].getBounds();
+                        var terrainBounds = terrainCont.children[f].getBounds();
+                        enemyBounds.x += 1;
+                        var colData = index.collide(enemyBounds, terrainBounds);
+                        if (colData[0]) {
+                            if (enemyBounds.x <= terrainBounds.x + terrainBounds.width) {
+                                movement = false;
+                            }
+                        }
+                    }
+                }
+                if (movement) {
+                    terrainCont.children[i].children[e].x += terrainCont.children[i].children[e].velx;
+                } else {
+                    terrainCont.children[i].children[e].velx *= -1;
+                    terrainCont.children[i].children[e].x += terrainCont.children[i].children[e].velx;
+                }
+                if (terrainCont.children[i].children[e].velx > 0) {
+                    terrainCont.children[i].children[e].texture = index.currentSprites.L;
+                } else {
+                    terrainCont.children[i].children[e].texture = index.currentSprites.R;
+                }
             }
         }
     }
     if (left && !stopped.stopped) { // Same as left but inverse kekw
         var movement = true;
-        for (let i = 0; i < terrainCont.children.length; i++) { // Counterintuitively, having multiple for loops is _far_ better, as it means I don't need to worry abt movement being triggered for each block
+        for (let i = 0; i < terrainCont.children.length; i++) {
             if (terrainCont.children[i].collide) {
                 var playerBounds = player.player.getBounds();
                 var terrainBounds = terrainCont.children[i].getBounds();

@@ -30,6 +30,7 @@ export function enemyType(data) {
         enemy.width = width;
         enemy.height = height;
         enemy.visible = true;
+        enemy.velx = 5;
         this.enemyCont.addChild(enemy);
     }
 }
