@@ -48,7 +48,7 @@ export function tick() {
                         menu.stop();
                     } else if (index.collide(playerBounds, enemyBounds)[0] && playerBounds.y + playerBounds.height + 50 < enemyBounds.y + enemyBounds.height) {
                         terrain.terrainCont.children[i].children.splice(e, 1);
-                        vely *= -1.5;
+                        vely *= -1.2;
                     }
                 }
             }
