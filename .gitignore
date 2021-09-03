@@ -3,3 +3,6 @@ testing.*
 *.csv
 *.exe
 *.zip
+*.gitignore
+*.exe
+melvin-win32-x64
