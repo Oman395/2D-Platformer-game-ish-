@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "electron": "^14.0.0",
     "fs": "^0.0.1-security",
     "json2csv": "^5.0.6",
     "live-server": "^1.2.1",

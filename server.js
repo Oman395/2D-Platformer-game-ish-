@@ -7,7 +7,7 @@ var params = {
     mount: ['./webpage', './node_modules'],
     root: './',
     logLevel: 0,
-    middleware: [function(req, res, next) { next(); }],
+    middleware: [function (req, res, next) { next(); }],
     root: 'Webpage',
     watch: 'Webpage'
 };

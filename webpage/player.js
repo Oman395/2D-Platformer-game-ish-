@@ -13,7 +13,12 @@ export function start(vy) {
     player = PIXI.Sprite.from(sprites[0]);
     player.anchor.set(0.5);
     player.y = window.innerHeight / 2;
-    player.x = Math.round(window.innerWidth / 20) * 10;
+    player.x = Math.round(window.innerWidth / 20) * 10; // This is a stupid fix, caused by an inherent error in the way that I wrote
+    // the collision script. Essentially, it looks around one pixel ahead & behind to see if it should be allowed to move. However, 
+    // when the player x & terrain x isn't a multiple of ten, when the player moves, it tends to clip the player into the terrain.
+    // I'm probably going to fix it by adding error checking and correction that just figures out distance to nearest block, and can
+    // compensate for the extra movement (I.E. if(player.x + 10 > terrainCont.children[i].x {deltaX = player.x + 10 - terrainCont.children[i];} terrainCont.x += velx - deltaX))
+    // But it'll take a while to implement and honestly I can't be assed right now, so here this stupid fix will stay :D
     player.width = 100;
     player.height = 100;
     vely = vy;

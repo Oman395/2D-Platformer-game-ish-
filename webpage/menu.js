@@ -164,7 +164,7 @@ document.addEventListener("keydown", function (event) { // See terrain&player ke
             }
             menuOn = false;
         } else {
-            index.start(0, x, y, vely, firsty);
+            index.start(data.currentMap, x, y, vely, firsty);
             for (let i = 0; i < sprites.length; i++) {
                 sprites[i].visible = false;
             }
