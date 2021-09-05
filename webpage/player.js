@@ -8,6 +8,7 @@ export var Collided = false;
 export var currentLeft = sprites[2];
 export var currentRight = sprites[3];
 export var up = false;
+export var falling = false;
 export var stopped = { stopped: false };
 export function start(vy) {
     player = PIXI.Sprite.from(sprites[0]);
@@ -63,7 +64,13 @@ export function tick() {
                     vely = 0;
                 }
                 var deltaY = playerBounds.y - terrainBounds.y + terrainBounds.height;
-                terrain.terrainCont.y += deltaY - 0.1;
+                terrain.terrainCont.y += deltaY - 0.0001;
+                if (up && !stopped.stopped) {
+                    if (vely < 8 ** vely > 0) {
+                        terrain.terrainCont.y += 0.2;
+                        vely = 8;
+                    }
+                }
             } else if (colData[0] && playerBounds.y > terrainBounds.y) { // More black magic
                 collided = true;
                 vely *= -0.7;
@@ -71,19 +78,22 @@ export function tick() {
             }
         }
     }
-    if (vely != 0 || !collided) {
-        if (!stopped.stopped) { // This single line of code made me rewrite the entire goddamn collision system cause when I implemented it on the old col system, it fucked everything b/c
-            // it was designed around the vely jumping around while stationary, and when I added this fix to solve something else, I realised what I had done...
+    if (vely != 0 || !collided) {// This single line of code made me rewrite the entire goddamn collision system cause when I implemented it on the old col system, it fucked everything b/c
+        // it was designed around the vely jumping around while stationary, and when I added this fix to solve something else, I realised what I had done...
+        if (!stopped.stopped) {
             vely -= 0.14;
         }
     }
     if (terrain.terrainCont.y < -1 * terrain.maxFall) { // Sexy ass fall out of world, code is kinda bad tho
+        falling = true;
         (async () => {
             for (let i = 0; player.y < window.innerHeight; player.y += 4) {
                 await new Promise(r => setTimeout(r, 1000 / 10));
             }
             menu.stop();
         })();
+    } else {
+        falling = false;
     }
 }
 document.addEventListener("keypress", function (event) {

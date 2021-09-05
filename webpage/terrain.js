@@ -3,13 +3,16 @@ import * as player from './player.js'
 import * as map from "./map.js";
 import * as enemy from "./enemy.js";
 export var terrainCont;
-var left = false;
-var right = false;
+export var left = false;
+export var right = false;
 var blocks = {};
 export var maxFall;
 export var velx = 0;
 export var meatball;
+export var currentSprites = {};
 export var stopped = { stopped: false };
+var prevX = 0;
+export var countOfX0 = 0;
 export function start(mapName, tx, ty, isStart) {
     meatball = new enemy.enemyType();
     maxFall = 100 * map.map[mapName].length + 400; // Sets the borders of the world, could probably use PIXI.app.getBounds() but eh, this works better IMO.
@@ -91,6 +94,12 @@ export function stop() { // I think this is legacy, but when I remove it everyth
     terrainCont.visible = false;
 }
 export function tick() {
+    if (prevX - terrainCont.x == 0) {
+        countOfX0++;
+    } else {
+        countOfX0 = 0;
+    }
+    prevX = terrainCont.x;
     for (let i = 0; i < terrainCont.children.length; i++) {
         var playerBounds = player.player.getBounds(); // Having playerbounds declared outside the for loop fucked everything cause I mess with the actual variable on line 145 & 149, so here it is inside :D
         var terrainBounds = terrainCont.children[i].getBounds();
@@ -124,25 +133,29 @@ export function tick() {
                     terrainCont.children[i].children[e].x += terrainCont.children[i].children[e].velx;
                 }
                 if (terrainCont.children[i].children[e].velx > 0) {
-                    terrainCont.children[i].children[e].texture = index.currentSprites.L;
+                    terrainCont.children[i].children[e].texture = currentSprites.L;
                 } else {
-                    terrainCont.children[i].children[e].texture = index.currentSprites.R;
+                    terrainCont.children[i].children[e].texture = currentSprites.R;
                 }
             }
         }
     }
-    if (left && !stopped.stopped) { // Same as left but inverse kekw
+    if (left && !stopped.stopped) {
         var movement = true;
         for (let i = 0; i < terrainCont.children.length; i++) {
             if (terrainCont.children[i].collide) {
                 var playerBounds = player.player.getBounds();
                 var terrainBounds = terrainCont.children[i].getBounds();
-                playerBounds.x -= 1;
+                playerBounds.x -= 10;
                 var colData = index.collide(playerBounds, terrainBounds);
                 if (colData[0]) {
                     if (colData[2] || playerBounds.y > terrainBounds.y - 75) {
+                        playerBounds.x += 10;
+                        var deltaX = playerBounds.x - (terrainBounds.x + terrainBounds.width);
                         velx = 0;
+                        movement = false;
                         if (playerBounds.x <= terrainBounds.x + terrainBounds.width) {
+                            terrainCont.x += deltaX;
                             movement = false;
                         }
                     }
@@ -155,18 +168,22 @@ export function tick() {
             velx = 0;
         }
     }
-    if (right && !stopped.stopped) { // Same as left but inverse kekw
+    if (right && !stopped.stopped) { // I accidentally deleted all my notes on the top bit so figure it out lmao
         var movement = true;
         for (let i = 0; i < terrainCont.children.length; i++) { // Counterintuitively, having multiple for loops is _far_ better, as it means I don't need to worry abt movement being triggered for each block
             if (terrainCont.children[i].collide) {
                 var playerBounds = player.player.getBounds();
                 var terrainBounds = terrainCont.children[i].getBounds();
-                playerBounds.x += 1;
+                playerBounds.x += 10;
                 var colData = index.collide(playerBounds, terrainBounds);
                 if (colData[0]) {
                     if (colData[2] || playerBounds.y > terrainBounds.y - 75) {
+                        playerBounds.x -= 10;
+                        var deltaX = playerBounds.x + playerBounds.width - terrainBounds.x;
                         velx = 0;
+                        movement = false;
                         if (playerBounds.x + playerBounds.width <= terrainBounds.x + terrainBounds.width) {
+                            terrainCont.x += deltaX;
                             movement = false;
                         }
                     }

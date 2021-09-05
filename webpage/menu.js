@@ -43,6 +43,20 @@ export function startUp(first) { // startUp("obviously")
         }
         menuOn = true; // Marks menu as on
     }
+    index.app.ticker.add(() => {
+        sprites.forEach((sprite) => {
+            sprite.x = window.innerWidth / 2;
+        })
+        worlds.forEach((world, index) => {
+            if (index < 3) {
+                world.x = (window.innerWidth / 2 - 150) + 150 * index;
+            } else if (index < 6) {
+                world.x = (window.innerWidth / 2 - 150) - 450 + 150 * index;
+            } else {
+                world.x = (window.innerWidth / 2 - 150) - 900 + 150 * index;
+            }
+        })
+    })
 }
 export function start() { // get everything ready
     for (let i = 0; i < sprites.length; i++) { // Configures main menu buttons
@@ -58,6 +72,7 @@ export function start() { // get everything ready
             sprites[3].visible = false;
             index.app.stage.addChild(sprites[3]);
         }
+        sprites[i].parent.addChild(sprites[i]);
     }
     for (let i = 0; i < worlds.length; i++) { // Configures world buttons
         worlds[i].buttonMode = true;
@@ -162,12 +177,18 @@ document.addEventListener("keydown", function (event) { // See terrain&player ke
             for (let i = 0; i < sprites.length; i++) {
                 sprites[i].visible = false;
             }
+            worlds.forEach((world) => {
+                world.visible = false;
+            });
             menuOn = false;
         } else {
             index.start(data.currentMap, x, y, vely, firsty);
             for (let i = 0; i < sprites.length; i++) {
                 sprites[i].visible = false;
             }
+            worlds.forEach((world) => {
+                world.visible = false;
+            });
             menuOn = false;
         }
     }

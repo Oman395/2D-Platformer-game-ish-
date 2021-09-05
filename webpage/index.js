@@ -42,13 +42,22 @@ export function collide(ab, bb) { // Collision logic, middle one I dont know wha
     ab.y + ab.height > bb.y + bb.height && ab.x + ab.width > bb.x && ab.x < bb.x + bb.width && ab.y + ab.height > bb.y && ab.y < bb.y + bb.height];
 }
 export function tick() {
+    if (!player.falling) {
+        var xErr = Math.round((window.innerWidth / 2 - player.player.x) / 10) * 10;
+        var yErr = Math.round((window.innerHeight / 2 - player.player.y) / 10) * 10;
+        player.player.x += xErr;
+        player.player.y += yErr;
+        terrain.terrainCont.x += xErr;
+        terrain.terrainCont.y += yErr;
+    }
     if (!terrain.stopped.stopped) { // Makes sure not paused
-        switch (player.vely == 0) { // All of this figures out exactly what the player movement is, and sets sprite accordingly. Also sets left&right sprite to its current animation fram instead of just a static image :D
+        switch (player.vely == 0 && player.vely == prevVelY) { // All of this figures out exactly what the player movement is, and sets sprite accordingly. Also sets left&right sprite to its current animation fram instead of just a static image :D
             case true: // y not moving
                 switch (terrain.velx == 0) {
                     case true: // still
                         if (player.vely == prevVelY) {
                             player.player.texture = player.sprites[0];
+
                         }
                         break;
                     case false: // x only
@@ -68,7 +77,9 @@ export function tick() {
                     case true: // y going up
                         switch (terrain.velx == 0) {
                             case true: // up
-                                player.player.texture = player.sprites[6];
+                                if (terrain.countOfX0 > 2) {
+                                    player.player.texture = player.sprites[6];
+                                }
                                 break;
                             case false: // y and x
                                 switch (terrain.velx > 0) {
