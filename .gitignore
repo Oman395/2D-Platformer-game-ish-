@@ -5,6 +5,5 @@ testing.*
 *.zip
 *.gitignore
 *.exe
-melvin-win32-x64/**/*
-build
+melvin-win32-x64
 dist
