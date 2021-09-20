@@ -146,24 +146,25 @@ export function tick() {
             if (terrainCont.children[i].collide) {
                 var playerBounds = player.player.getBounds();
                 var terrainBounds = terrainCont.children[i].getBounds();
-                playerBounds.x -= 10;
+                playerBounds.x -= 9;
                 var colData = index.collide(playerBounds, terrainBounds);
                 if (colData[0]) {
-                    if (colData[2] || playerBounds.y > terrainBounds.y - 75) {
-                        playerBounds.x += 10;
-                        var deltaX = playerBounds.x - (terrainBounds.x + terrainBounds.width);
-                        velx = 0;
-                        movement = false;
-                        if (playerBounds.x <= terrainBounds.x + terrainBounds.width) {
-                            terrainCont.x += deltaX;
-                            movement = false;
+                    if (playerBounds.y > terrainBounds.y - 75) {
+                        if (terrainCont.children[i].collide) {
+                            if (terrainCont.children[i].isSprite) {
+                                playerBounds.x += 9;
+                                var deltaX = playerBounds.x - (terrainBounds.x + terrainBounds.width);
+                                velx = 0;
+                                movement = false;
+                                terrainCont.x += deltaX;
+                            }
                         }
                     }
                 }
             }
         }
         if (movement && !right) {
-            velx = 10;
+            velx = 9;
         } else if (right) {
             velx = 0;
         }
@@ -174,24 +175,23 @@ export function tick() {
             if (terrainCont.children[i].collide) {
                 var playerBounds = player.player.getBounds();
                 var terrainBounds = terrainCont.children[i].getBounds();
-                playerBounds.x += 10;
+                playerBounds.x += 9;
                 var colData = index.collide(playerBounds, terrainBounds);
                 if (colData[0]) {
-                    if (colData[2] || playerBounds.y > terrainBounds.y - 75) {
-                        playerBounds.x -= 10;
-                        var deltaX = playerBounds.x + playerBounds.width - terrainBounds.x;
-                        velx = 0;
-                        movement = false;
-                        if (playerBounds.x + playerBounds.width <= terrainBounds.x + terrainBounds.width) {
-                            terrainCont.x += deltaX;
+                    if (playerBounds.y > terrainBounds.y - 75) {
+                        if (terrainCont.children[i].isSprite) {
+                            playerBounds.x -= 9;
+                            var deltaX = playerBounds.x + playerBounds.width - terrainBounds.x;
+                            velx = 0;
                             movement = false;
+                            terrainCont.x += deltaX; // Fuckin finally made error correction, now the goddamn velocity can be whatever the hell I want :D
                         }
                     }
                 }
             }
         }
         if (movement && !left) {
-            velx = -10;
+            velx = -9;
         } else if (left) {
             velx = 0;
         }
@@ -200,7 +200,7 @@ export function tick() {
     if (!player.stopped.stopped) { // makes sure that game isnt paused before adjusting pos by vely, vely is handled by player to hopefully be more effecient code
         terrainCont.y += player.vely;
     }
-    if (!stopped.stopped) { // DK why i use player.stopped.stopped for one and stopped.stopped for the other tbh
+    if (!stopped.stopped) { // DK why i use player.stopped.stopped for one and stopped.stopped for the other tbh, just kinda too lazy to change it
         terrainCont.x += velx;
     }
     for (let i = 0; i < terrainCont.children.length; i++) {
@@ -227,6 +227,7 @@ export function tick() {
         }
     }
 }
+
 function addBlock(name, x, y, image, angle, boundary, display) { // See function name lol
     blocks[name] = new PIXI.Sprite.from(image);
     blocks[name].y = y;
@@ -256,11 +257,11 @@ function addBlock(name, x, y, image, angle, boundary, display) { // See function
     }
     terrainCont.addChild(blocks[name]);
 }
-document.addEventListener("keypress", function (event) { // I have a variable for left and right, because otherwise I only get one event listener and it messes with everything
+document.addEventListener("keypress", function(event) { // I have a variable for left and right, because otherwise I only get one event listener and it messes with everything
     switch (event.key) {
         case "a":
             left = true;
-            document.addEventListener("keyup", function (event) {
+            document.addEventListener("keyup", function(event) {
                 switch (event.key) {
                     case "a":
                         if (!right) {
@@ -273,7 +274,7 @@ document.addEventListener("keypress", function (event) { // I have a variable fo
             break;
         case "d":
             right = true;
-            document.addEventListener("keyup", function (event) {
+            document.addEventListener("keyup", function(event) {
                 switch (event.key) {
                     case "d":
                         if (!left) {

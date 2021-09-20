@@ -7,3 +7,4 @@ testing.*
 *.exe
 melvin-win32-x64
 dist
+build
