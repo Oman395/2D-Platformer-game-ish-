@@ -8,9 +8,10 @@ function createWindow() {
         width: 1920,
         height: 1080,
         icon: './webpage/player-melvin.png',
-        // webPreferences: {
-        //     preload: path.join(__dirname, 'preload.js')
-        // }
+        webPreferences: {
+            nodeIntegration: true,
+            contextIsolation: false,
+        }
     })
 
     // and load the index.html of the app.

@@ -13,6 +13,7 @@ export var map = [
         'S': Start position
         'X': Boundary block, player teleps to the bottom of the world and dies instantly, make sure no blocks in view!
         'E' Enemy, jump on the head to kill- but watch out for the sides!
+        'F' Finish flag!
         One character is exactly the same size as the player model
         Add as many lines as you want, the blocks move with the player
         Dashes are spaces
@@ -33,7 +34,7 @@ export var map = [
         '',
         '-----()',
         '-----{}',
-        '',
+        '-------------------------------------------------------F',
         '--()-----------------------------------------()-------()',
         '--{}----------------------------------()-----LR---E---LR',
         '-------------------------------------($}-----L]TTTTTTT[R',
@@ -47,6 +48,7 @@ export var map = [
         '--------------{}------{BBBBBBBB}',
     ],
     [ // This is a placeholder for when I start making actual maps lol
+        '-------------------------------------------------F',
         '------------------------------------------------()',
         '--------------------------------------()--------{}',
         '--S-------------------------()--------{}',

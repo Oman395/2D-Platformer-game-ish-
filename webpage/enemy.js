@@ -1,4 +1,3 @@
-import * as index from "./index.js";
 export function enemyType(data) {
     this.data = data;
     this.default = {
@@ -21,9 +20,7 @@ export function enemyType(data) {
         }
     }
     this.enemyCont = new PIXI.Container();
-    // index.app.stage.addChild(this.enemyCont);
     this.newEnemy = function (posx, posy, width, height) {
-        console.log("new!");
         var enemy = new PIXI.Sprite.from(this.data.models.model);
         enemy.x = posx;
         enemy.y = posy;

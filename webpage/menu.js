@@ -1,4 +1,11 @@
-import * as index from "./index.js"
+import * as index from "./index.js";
+const fs = require("fs");
+if(!fs.existsSync('data.json')) fs.writeFileSync({
+    currentMap: 0,
+    unlocked: 0,
+})
+var data = JSON.parse(fs.readFileSync('data.json'));
+console.log(data.currentMap);
 var x = 0;
 var y = 0;
 var velx = 0;
@@ -8,7 +15,6 @@ var sprites = [PIXI.Sprite.from("./images/menu.png"), // Main menu buttons
 PIXI.Sprite.from("./images/start.png"),
 PIXI.Sprite.from("./images/about.png"),
 PIXI.Sprite.from("./images/resume.png")]
-var data = { currentMap: 0, };
 var worlds = [ // World selector buttons
     PIXI.Sprite.from("./images/one.png"),
     PIXI.Sprite.from("./images/two.png"),
@@ -22,7 +28,7 @@ var worlds = [ // World selector buttons
 ];
 var firsty;
 export function startUp(first) { // startUp("obviously")
-    firsty = first;
+    firsty = first; // idk why this exists, too much effort to fix
     if (!menuOn) { // If menu isn't on
         if (firsty) {
             for (let i = 0; i < sprites.length; i++) {
@@ -48,12 +54,17 @@ export function startUp(first) { // startUp("obviously")
             sprite.x = window.innerWidth / 2;
         })
         worlds.forEach((world, index) => {
-            if (index < 3) {
-                world.x = (window.innerWidth / 2 - 150) + 150 * index;
-            } else if (index < 6) {
-                world.x = (window.innerWidth / 2 - 150) - 450 + 150 * index;
+            if (index <= data.unlocked) {
+                world.renderable = true;
+                if (index < 3) {
+                    world.x = (window.innerWidth / 2 - 150) + 150 * index;
+                } else if (index < 6) {
+                    world.x = (window.innerWidth / 2 - 150) - 450 + 150 * index;
+                } else {
+                    world.x = (window.innerWidth / 2 - 150) - 900 + 150 * index;
+                }
             } else {
-                world.x = (window.innerWidth / 2 - 150) - 900 + 150 * index;
+                world.renderable = false;
             }
         })
     })
@@ -90,6 +101,7 @@ export function start() { // get everything ready
     for (let i = 0; i < worlds.length; i++) { // Sets pointerdown for each world button
         worlds[i].on('pointerdown', () => {
             data.currentMap = i;
+            fs.writeFileSync('data.json', JSON.stringify(data));
             index.start(i, x, y, vely, firsty);
             for (let i = 0; i < sprites.length; i++) {
                 sprites[i].visible = false;
@@ -157,7 +169,12 @@ export function start() { // get everything ready
         }
     });
 }
-export function stop() {
+export function stop(deathOrWin) {
+    if (deathOrWin && data.currentMap == data.unlocked) {
+        data.unlocked = data.currentMap + 1;
+        console.log(data.unlocked);
+        fs.writeFileSync('data.json', JSON.stringify(data));
+    }
     if (!menuOn) {
         x = 0;
         y = 0;

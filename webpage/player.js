@@ -9,17 +9,13 @@ export var currentLeft = sprites[2];
 export var currentRight = sprites[3];
 export var up = false;
 export var falling = false;
-export var stopped = { stopped: false };
+export var stopped = { stopped: false }; // Doing this terribleness b/c normal vars are read only, ik theres a better way but im too goddamn lazy.
 export function start(vy) {
     player = PIXI.Sprite.from(sprites[0]);
     player.anchor.set(0.5);
     player.y = window.innerHeight / 2;
-    player.x = Math.round(window.innerWidth / 20) * 10; // This is a stupid fix, caused by an inherent error in the way that I wrote
-    // the collision script. Essentially, it looks around one pixel ahead & behind to see if it should be allowed to move. However, 
-    // when the player x & terrain x isn't a multiple of ten, when the player moves, it tends to clip the player into the terrain.
-    // I'm probably going to fix it by adding error checking and correction that just figures out distance to nearest block, and can
-    // compensate for the extra movement (I.E. if(player.x + 10 > terrainCont.children[i].x {deltaX = player.x + 10 - terrainCont.children[i];} terrainCont.x += velx - deltaX))
-    // But it'll take a while to implement and honestly I can't be assed right now, so here this stupid fix will stay :D
+    player.x = Math.round(window.innerWidth / 20) * 10; // This is a stupid fix, but I don't actually know if it is needed atm cause I fixed the velx collision issues. However, I'm
+    // Too lazy to check, so here it stays :D
     player.width = 100;
     player.height = 100;
     vely = vy;
@@ -44,17 +40,22 @@ export function tick() {
             var playerBounds = player.getBounds();
             var terrainBounds = terrain.terrainCont.children[i].getBounds();
             var colData = index.collide(playerBounds, terrainBounds);
+            if (colData[0] && terrain.terrainCont.children[i].ending) {
+                menu.stop(true);
+            }
             if (colData[0] && terrain.terrainCont.children[i].boundary) { // If colliding with a boundary block, fall out of world
                 terrain.terrainCont.y = -1 * terrain.maxFall;
             }
             if (colData[0] && terrain.terrainCont.children[i].length != 0) {
                 for (let e = 0; e < terrain.terrainCont.children[i].children.length; e++) {
                     var enemyBounds = terrain.terrainCont.children[i].children[e].getBounds();
-                    if (index.collide(playerBounds, enemyBounds)[0] && playerBounds.y + playerBounds.height + 50 > enemyBounds.y + enemyBounds.height) {
-                        menu.stop();
-                    } else if (index.collide(playerBounds, enemyBounds)[0] && playerBounds.y + playerBounds.height + 50 < enemyBounds.y + enemyBounds.height) {
-                        terrain.terrainCont.children[i].children.splice(e, 1);
-                        vely *= -1.2;
+                    if (!terrain.terrainCont.children[i].ending) {
+                        if (index.collide(playerBounds, enemyBounds)[0] && playerBounds.y + playerBounds.height + 50 > enemyBounds.y + enemyBounds.height) {
+                            menu.stop();
+                        } else if (index.collide(playerBounds, enemyBounds)[0] && playerBounds.y + playerBounds.height + 50 < enemyBounds.y + enemyBounds.height) {
+                            terrain.terrainCont.children[i].children.splice(e, 1);
+                            vely *= -1.2;
+                        }
                     }
                 }
             }

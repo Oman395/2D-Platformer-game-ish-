@@ -2,6 +2,7 @@ import * as index from './index.js'
 import * as player from './player.js'
 import * as map from "./map.js";
 import * as enemy from "./enemy.js";
+import * as menu from "./menu.js";
 export var terrainCont;
 export var left = false;
 export var right = false;
@@ -79,6 +80,9 @@ export function start(mapName, tx, ty, isStart) {
                         ty = (window.innerHeight / 2 - 50) - (100 * i);
                     }
                     break;
+                case 'F':
+                    endPos(e * 100 - 100, 100 * i);
+                    break;
                 case 'E':
                     meatball.newEnemy(e * 100 - 100, 100 * i, 100, 100);
                     break;
@@ -87,11 +91,25 @@ export function start(mapName, tx, ty, isStart) {
     }
     meatball.enemyCont.collide = false;
     terrainCont.addChild(meatball.enemyCont);
+    var deltaY = ty - terrainCont.y;
+    var deltaX = tx - terrainCont.x;
     terrainCont.y = ty;
     terrainCont.x = tx;
+    console.log(index.app.stage);
 }
 export function stop() { // I think this is legacy, but when I remove it everything breaks, so here it stays :D
     terrainCont.visible = false;
+}
+function endPos(x, y) {
+    var end = new PIXI.Sprite.from('./images/flag.png');
+    end.x = x;
+    end.y = y;
+    end.width = 100;
+    end.height = 100;
+    end.collide = true;
+    end.visible = true;
+    end.ending = true;
+    terrainCont.addChild(end);
 }
 export function tick() {
     if (prevX - terrainCont.x == 0) {
@@ -164,7 +182,7 @@ export function tick() {
             }
         }
         if (movement && !right) {
-            velx = 9;
+            velx = 10;
         } else if (right) {
             velx = 0;
         }
@@ -191,7 +209,7 @@ export function tick() {
             }
         }
         if (movement && !left) {
-            velx = -9;
+            velx = -10;
         } else if (left) {
             velx = 0;
         }
@@ -257,11 +275,11 @@ function addBlock(name, x, y, image, angle, boundary, display) { // See function
     }
     terrainCont.addChild(blocks[name]);
 }
-document.addEventListener("keypress", function(event) { // I have a variable for left and right, because otherwise I only get one event listener and it messes with everything
+document.addEventListener("keypress", function (event) { // I have a variable for left and right, because otherwise I only get one event listener and it messes with everything
     switch (event.key) {
         case "a":
             left = true;
-            document.addEventListener("keyup", function(event) {
+            document.addEventListener("keyup", function (event) {
                 switch (event.key) {
                     case "a":
                         if (!right) {
@@ -274,7 +292,7 @@ document.addEventListener("keypress", function(event) { // I have a variable for
             break;
         case "d":
             right = true;
-            document.addEventListener("keyup", function(event) {
+            document.addEventListener("keyup", function (event) {
                 switch (event.key) {
                     case "d":
                         if (!left) {

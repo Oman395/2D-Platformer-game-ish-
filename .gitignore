@@ -8,3 +8,4 @@ testing.*
 melvin-win32-x64
 dist
 build
+node_modules
