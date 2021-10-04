@@ -95,7 +95,6 @@ export function start(mapName, tx, ty, isStart) {
     var deltaX = tx - terrainCont.x;
     terrainCont.y = ty;
     terrainCont.x = tx;
-    console.log(index.app.stage);
 }
 export function stop() { // I think this is legacy, but when I remove it everything breaks, so here it stays :D
     terrainCont.visible = false;
@@ -167,6 +166,9 @@ export function tick() {
                 playerBounds.x -= 9;
                 var colData = index.collide(playerBounds, terrainBounds);
                 if (colData[0]) {
+                    if (terrainCont.children[i].ending == true) {
+                        menu.stop(true);
+                    }
                     if (playerBounds.y > terrainBounds.y - 75) {
                         if (terrainCont.children[i].collide) {
                             if (terrainCont.children[i].isSprite) {
@@ -196,6 +198,9 @@ export function tick() {
                 playerBounds.x += 9;
                 var colData = index.collide(playerBounds, terrainBounds);
                 if (colData[0]) {
+                    if(terrainCont.children[i].ending == true) {
+                        menu.stop(true);
+                    }
                     if (playerBounds.y > terrainBounds.y - 75) {
                         if (terrainCont.children[i].isSprite) {
                             playerBounds.x -= 9;

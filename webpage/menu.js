@@ -1,11 +1,10 @@
 import * as index from "./index.js";
 const fs = require("fs");
-if(!fs.existsSync('data.json')) fs.writeFileSync({
+if (!fs.existsSync('./data.json')) fs.writeFileSync('./data.json', JSON.stringify({
     currentMap: 0,
     unlocked: 0,
-})
-var data = JSON.parse(fs.readFileSync('data.json'));
-console.log(data.currentMap);
+}));
+var data = JSON.parse(fs.readFileSync('./data.json'));
 var x = 0;
 var y = 0;
 var velx = 0;
@@ -172,7 +171,6 @@ export function start() { // get everything ready
 export function stop(deathOrWin) {
     if (deathOrWin && data.currentMap == data.unlocked) {
         data.unlocked = data.currentMap + 1;
-        console.log(data.unlocked);
         fs.writeFileSync('data.json', JSON.stringify(data));
     }
     if (!menuOn) {
