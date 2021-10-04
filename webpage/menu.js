@@ -99,16 +99,18 @@ export function start() { // get everything ready
     }
     for (let i = 0; i < worlds.length; i++) { // Sets pointerdown for each world button
         worlds[i].on('pointerdown', () => {
-            data.currentMap = i;
-            fs.writeFileSync('data.json', JSON.stringify(data));
-            index.start(i, x, y, vely, firsty);
-            for (let i = 0; i < sprites.length; i++) {
-                sprites[i].visible = false;
+            if (worlds[i].renderable) {
+                data.currentMap = i;
+                fs.writeFileSync('data.json', JSON.stringify(data));
+                index.start(i, x, y, vely, firsty);
+                for (let i = 0; i < sprites.length; i++) {
+                    sprites[i].visible = false;
+                }
+                for (let i = 0; i < worlds.length; i++) {
+                    worlds[i].visible = false;
+                }
+                menuOn = false;
             }
-            for (let i = 0; i < worlds.length; i++) {
-                worlds[i].visible = false;
-            }
-            menuOn = false;
         });
     }
     sprites[1].on('pointerdown', () => { // rest of these are just defining the buttons
